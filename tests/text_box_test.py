@@ -1,5 +1,5 @@
 import unittest
-from src.components import TextBox,Text,Font,FontSize
+from src.components import TextBox,Text,Font,FontSize,ListTextBox
 
 
 
@@ -40,6 +40,18 @@ class TestTextBox(unittest.TestCase):
         self.assertEqual(box.texts[1].str(),"Good Bye")
 
         
+
+class TestListTextBox(unittest.TestCase):
+
+    def test_複数のTextを保持可能(self):
+        box = ListTextBox()
+        box.add(Text("Hello World"))
+        box.add(Text("Good Bye"))
+
+        self.assertEqual(box.texts[0].str(),"Hello World")
+        self.assertEqual(box.texts[1].str(),"Good Bye")
+
+
 
 
 if __name__ == "__main__":

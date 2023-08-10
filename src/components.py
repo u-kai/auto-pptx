@@ -47,3 +47,12 @@ class TextBox():
     def add(self,text:Text):
         self.texts.append(text) 
         return 
+
+class ListTextBox():
+
+    def __init__(self):
+        self.texts = []
+
+    def add(self,text:Text):
+        self.texts.append(text) 
+        return 
