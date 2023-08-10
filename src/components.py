@@ -29,6 +29,7 @@ class Text():
         self.text = text
         self.font = Font.meiryo()
         self.size = FontSize.default()
+        self.bold = False
         return 
 
     def str(self)->str:
@@ -39,6 +40,9 @@ class Text():
 
     def change_size(self,size:FontSize):
         self.size = size
+
+    def to_bold(self):
+        self.bold = True
 
     def __eq__(self,other)->bool:
         return self.text == other.text and self.font == other.font and self.size == other.size

@@ -3,7 +3,7 @@ from src.components import TextBox,Text,Font,FontSize,ListText
 
 
 
-class TextText(unittest.TestCase):
+class TestText(unittest.TestCase):
     def test_textは文字列を保持して返すことできる(self):
 
         sut = Text("Hello World")
@@ -26,6 +26,16 @@ class TextText(unittest.TestCase):
         sut.change_size(FontSize(28))
 
         self.assertEqual(sut.size,FontSize(28))
+
+    def test_textはboldにすることができる(self):
+
+        sut = Text("Hello World")
+
+        sut.to_bold()
+        
+        self.assertTrue(sut.bold)
+
+
         
 
 
@@ -68,6 +78,7 @@ class TestListText(unittest.TestCase):
 
         sut.add_child_to(1,Text("Child2"))
 
+        self.assertEqual(sut.top(0).child(0),None)
         self.assertEqual(sut.top(1).child(0).str(),"Child2")
 
 
