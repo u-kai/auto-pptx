@@ -1,5 +1,5 @@
 import unittest
-from src.components import TextBox,Text,Font
+from src.components import TextBox,Text,Font,FontSize
 
 
 
@@ -16,6 +16,18 @@ class TextText(unittest.TestCase):
         sut.change_font(Font.meiryo_ui())
 
         self.assertEqual(sut.font,Font.meiryo_ui())
+
+    def test_textはsizeの情報を保持できる(self):
+
+        sut = Text("Hello World")
+
+        self.assertEqual(sut.size,FontSize(18))
+
+        sut.change_size(FontSize(28))
+
+        self.assertEqual(sut.size,FontSize(28))
+        
+
 
 
 class TestTextBox(unittest.TestCase):
