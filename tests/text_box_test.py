@@ -1,5 +1,5 @@
 import unittest
-from src.components import TextBox,Text,Font,FontSize,ListTextBox
+from src.components import TextBox,Text,Font,FontSize,ListText
 
 
 
@@ -41,16 +41,17 @@ class TestTextBox(unittest.TestCase):
 
         
 
-class TestListTextBox(unittest.TestCase):
+class TestListText(unittest.TestCase):
+    def test_ListTextは再帰的な階層構造を持つ(self):
+        sut = ListText(Text("Parent"))
 
-    def test_複数のTextを保持可能(self):
-        box = ListTextBox()
-        box.add(Text("Hello World"))
-        box.add(Text("Good Bye"))
+        sut.add_child(Text("Child"))
 
-        self.assertEqual(box.texts[0].str(),"Hello World")
-        self.assertEqual(box.texts[1].str(),"Good Bye")
-
+        print(sut.top)
+        self.assertEqual(sut.top(),Text("Parent"))
+        self.assertEqual(sut.child(),ListText(Text("Child")))
+        self.assertEqual(sut.child().top(),Text("Child"))
+        self.assertEqual(sut.child().child(),None)
 
 
 

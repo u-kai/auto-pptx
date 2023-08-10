@@ -31,7 +31,7 @@ class Text():
         self.size = FontSize.default()
         return 
 
-    def str(self):
+    def str(self)->str:
         return self.text
 
     def change_font(self,font:Font):
@@ -39,6 +39,11 @@ class Text():
 
     def change_size(self,size:FontSize):
         self.size = size
+
+    def __eq__(self,other)->bool:
+        return self.text == other.text and self.font == other.font and self.size == other.size
+
+
 
 class TextBox():
     def __init__(self):
@@ -48,11 +53,22 @@ class TextBox():
         self.texts.append(text) 
         return 
 
-class ListTextBox():
 
-    def __init__(self):
-        self.texts = []
+class ListText():
+    def __init__(self,text:Text):
+        self._top = text
+        self._child = None
 
-    def add(self,text:Text):
-        self.texts.append(text) 
-        return 
+    def add_child(self,child:Text):
+        self._child = ListText(child)
+        return
+
+    def top(self) -> Text:
+        return self._top
+
+    def child(self):
+        return self._child
+
+    def __eq__(self,other)->bool:
+        return self._top == other._top and self._child == other._child
+    
