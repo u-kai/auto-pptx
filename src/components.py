@@ -70,9 +70,6 @@ class ListText():
     def lists(self):
         return self._tops
 
-    def top(self) -> Text:
-        return self._tops[0]
-
     def child(self):
         return self._child
 

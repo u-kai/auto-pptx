@@ -47,9 +47,9 @@ class TestListText(unittest.TestCase):
 
         sut.add_child(Text("Child"))
 
-        self.assertEqual(sut.top(),Text("Parent"))
+        self.assertEqual(sut.lists()[0],Text("Parent"))
         self.assertEqual(sut.child(),ListText(Text("Child")))
-        self.assertEqual(sut.child().top(),Text("Child"))
+        self.assertEqual(sut.child().lists()[0],Text("Child"))
         self.assertEqual(sut.child().child(),None)
 
     def test_ListTextの要素は兄弟を持つ(self):
