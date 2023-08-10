@@ -8,8 +8,8 @@ class TestTextBox(unittest.TestCase):
         box.add(Text("Hello World"))
         box.add(Text("Good Bye"))
 
-        self.assertEquals(box.texts[0].str(),"Hello World")
-        self.assertEquals(box.texts[1].str(),"Good Bye")
+        self.assertEqual(box.texts[0].str(),"Hello World")
+        self.assertEqual(box.texts[1].str(),"Good Bye")
 
         
 
