@@ -1,5 +1,21 @@
 import unittest
-from src.components import TextBox,Text
+from src.components import TextBox,Text,Font
+
+
+
+class TextText(unittest.TestCase):
+    def test_textは文字列を保持して返すことできる(self):
+
+        sut = Text("Hello World")
+
+        self.assertEqual(sut.str(),"Hello World")
+
+    def test_textはfontの情報を保持できる(self):
+
+        sut = Text("Hello World")
+        sut.change_font(Font.meiryo_ui())
+
+        self.assertEqual(sut.font,Font.meiryo_ui())
 
 
 class TestTextBox(unittest.TestCase):
@@ -13,6 +29,6 @@ class TestTextBox(unittest.TestCase):
 
         
 
-    #def test_fontの種類を選択可能(self):
-    #    sut = TextBox()
-    #   s
+
+if __name__ == "__main__":
+    unittest.main()
