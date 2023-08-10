@@ -45,12 +45,11 @@ class TestListText(unittest.TestCase):
     def test_ListTextは再帰的な階層構造を持つ(self):
         sut = ListText(Text("Parent"))
 
-        sut.add_child(Text("Child"))
+        sut.add_child_to(0,Text("Child"))
 
-        self.assertEqual(sut.lists()[0],Text("Parent"))
-        self.assertEqual(sut.child(),ListText(Text("Child")))
-        self.assertEqual(sut.child().lists()[0],Text("Child"))
-        self.assertEqual(sut.child().child(),None)
+        self.assertEqual(sut.top(0).str(),"Parent")
+        self.assertEqual(sut.top(0).child(0).str(),"Child")
+        self.assertEqual(sut.top(0).child(0).child(0),None)
 
     def test_ListTextの要素は兄弟を持つ(self):
 
@@ -58,8 +57,18 @@ class TestListText(unittest.TestCase):
 
         sut.add_siblings(Text("Parent2"))
 
-        self.assertEqual(sut.lists()[0],Text("Parent1"))
-        self.assertEqual(sut.lists()[1],Text("Parent2"))
+        self.assertEqual(sut.top(0).str(),"Parent1")
+        self.assertEqual(sut.top(1).str(),"Parent2")
+
+    def test_ListTextの兄弟要素は子供を持つことができる(self):
+
+        sut = ListText(Text("Parent1"))
+
+        sut.add_siblings(Text("Parent2"))
+
+        sut.add_child_to(1,Text("Child2"))
+
+        self.assertEqual(sut.top(1).child(0).str(),"Child2")
 
 
 
