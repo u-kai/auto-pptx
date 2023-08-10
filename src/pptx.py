@@ -1,8 +1,13 @@
+from pptx import Presentation
+
 
 class PPTX():
     def __init__(self,filename:str):
-        pass
+        self.presentation = Presentation()
+        self.filename = filename
 
     def save(self):
-        pass
+        self.presentation.save(self.filename)
+        
+        
 
