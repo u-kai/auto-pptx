@@ -56,19 +56,26 @@ class TextBox():
 
 class ListText():
     def __init__(self,text:Text):
-        self._top = text
+        self._tops = [text]
         self._child = None
 
     def add_child(self,child:Text):
         self._child = ListText(child)
         return
 
+    def add_siblings(self,text:Text):
+        self._tops.append(text)
+        return
+
+    def lists(self):
+        return self._tops
+
     def top(self) -> Text:
-        return self._top
+        return self._tops[0]
 
     def child(self):
         return self._child
 
     def __eq__(self,other)->bool:
-        return self._top == other._top and self._child == other._child
+        return self.lists() == other.lists() and self._child == other._child
     
