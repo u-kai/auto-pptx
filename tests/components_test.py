@@ -36,10 +36,6 @@ class TestText(unittest.TestCase):
         self.assertTrue(sut.bold)
 
 
-        
-
-
-
 class TestTextBox(unittest.TestCase):
     def test_複数のTextを保持可能(self):
         box = TextBox()
