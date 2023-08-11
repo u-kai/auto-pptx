@@ -1,5 +1,6 @@
 from src.slide import Slide
 from pptx.util import Pt
+from pptx.enum.text import MSO_AUTO_SIZE
 
 
 class SlideConvertor:
@@ -16,10 +17,11 @@ class SlideConvertor:
                 textbox.size.height,
             )
             text_frame = converted_box.text_frame
-
+            text_frame.text = ""
             for i, text in enumerate(textbox.value.texts):
                 paragraph = text_frame.add_paragraph()
                 paragraph.text = text.str()
                 paragraph.font.bold = text.bold
                 paragraph.font.size = Pt(text.size())
+            text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
         return
