@@ -16,6 +16,10 @@ class SlideConvertor:
 
     def __convert_list_text(self, list_texts: [ListText]):
         def children(text_frame, parent: RecText, i: int):
+            if i > 7:
+                # pptx only support 8 level list
+                i = 7
+
             if len(parent.children()) == 0:
                 return
 
