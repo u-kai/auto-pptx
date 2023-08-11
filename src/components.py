@@ -9,6 +9,9 @@ class Font:
     def meiryo():
         return Font("Meiryo", Font.__DEFAULT_SIZE())
 
+    def calibri():
+        return Font("Calibri", Font.__DEFAULT_SIZE())
+
     def meiryo_ui():
         return Font("Meiryo UI", Font.__DEFAULT_SIZE)
 
@@ -22,7 +25,7 @@ class Font:
 class Text:
     def __init__(self, text: str):
         self.text = text
-        self.font = Font.meiryo()
+        self.font = Font.calibri()
         self.bold = False
         return
 

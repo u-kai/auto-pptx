@@ -23,7 +23,7 @@ class Component:
 
 class Slide:
     def __init__(self):
-        self.textboxs = []
+        self.textboxs: [TextBox] = []
         return
 
     def add_textbox(self, point: StartPoint, size: Size, textbox: TextBox):

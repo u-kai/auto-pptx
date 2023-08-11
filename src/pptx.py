@@ -3,30 +3,24 @@ import collections.abc
 from pptx import Presentation
 
 from src.slide import Slide
+from src.convertor import SlideConvertor
 
 
 class PPTX:
     def __init__(self, filename: str):
         self.presentation = Presentation()
         self.filename = filename
-        self.convertor = SlideApiConvertor()
         self.page = 0
 
     def save(self):
         self.presentation.save(self.filename)
 
     def add_slide(self, slide: Slide):
-        layout = self.convertor.convert(slide)
+        self.presentation.slides.add_slide(self.presentation.slide_layouts[0])
+        convertor = SlideConvertor(self.presentation.slides[self.page])
+        convertor.convert(slide)
         self.page += 1
-        return  # self.presentation.slides.add_slide(layout)
+        return
 
     def page_num(self) -> int:
         return self.page
-
-
-class SlideApiConvertor:
-    def __init__(self):
-        return
-
-    def convert(self, slide: Slide):
-        return

@@ -40,6 +40,7 @@ class MockPPTXParagraph:
 
 class MockPPTXTextFrame:
     def __init__(self):
+        self.font_family = "Calibri"
         self.default = MockPPTXParagraph()
         self.text = self.default.text
         self.font = self.default.font
@@ -50,6 +51,12 @@ class MockPPTXTextFrame:
         para = MockPPTXParagraph()
         self.paragraphs.append(para)
         return para
+
+    def fit_text(self, font_family: str, max_size: int, bold: bool):
+        self.font_family = font_family
+        self.font.bold = bold
+        self.font.size = max_size
+        return
 
 
 class MockPPTXTextBox:

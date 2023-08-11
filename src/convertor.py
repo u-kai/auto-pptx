@@ -19,8 +19,7 @@ class SlideConvertor:
             for i, text in enumerate(textbox.value.texts):
                 if i == 0:
                     text_frame.text = text.str()
-                    text_frame.font.bold = text.bold
-                    text_frame.font.size = text.size()
+                    text_frame.fit_text(text.font.font, text.size(), text.bold)
                     continue
 
                 paragraph = text_frame.add_paragraph()
