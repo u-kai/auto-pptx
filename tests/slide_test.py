@@ -166,84 +166,94 @@ class TestSlideConvertor(unittest.TestCase):
             mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.bold, False
         )
 
-    # def test_slideからtextboxを複数取得して変換可能(self):
-    #    # 3rd party library mock
-    #    mock = MockPPTXSlideApi()
-    #    # My types
-    #    text = Text("Hello World")
-    #    font = Font.meiryo_ui()
-    #    font.change_size(28)
-    #    text.change_font(font)
-    #    text.to_bold()
+    def test_slideからtextboxを複数取得して変換可能(self):
+        # 3rd party library mock
+        mock = MockPPTXSlideApi()
+        # My types
+        text = Text("Hello World")
+        font = Font.meiryo_ui()
+        font.change_size(28)
+        text.change_font(font)
+        text.to_bold()
 
-    #    text2 = Text("Good Bye")
-    #    font = Font.meiryo()
-    #    font.change_size(18)
-    #    text2.change_font(font)
+        text2 = Text("Good Bye")
+        font = Font.meiryo()
+        font.change_size(18)
+        text2.change_font(font)
 
-    #    box = TextBox()
-    #    box.add(text)
-    #    box.add(text2)
+        box = TextBox()
+        box.add(text)
+        box.add(text2)
 
-    #    slide = Slide()
-    #    slide.add_textbox(
-    #        StartPoint(0, 0),
-    #        Size(300, 300),
-    #        box,
-    #    )
+        slide = Slide()
+        slide.add_textbox(
+            StartPoint(0, 0),
+            Size(300, 300),
+            box,
+        )
 
-    #    text = Text("Rust Good Language")
-    #    font = Font.meiryo_ui()
-    #    font.change_size(28)
-    #    text.change_font(font)
-    #    text.to_bold()
+        text = Text("Rust Good Language")
+        font = Font.meiryo_ui()
+        font.change_size(28)
+        text.change_font(font)
+        text.to_bold()
 
-    #    text2 = Text("Python Good Language.But I love Rust more than Python")
-    #    font = Font.meiryo()
-    #    font.change_size(18)
-    #    text2.change_font(font)
+        text2 = Text("Python Good Language.But I love Rust more than Python")
+        font = Font.meiryo()
+        font.change_size(18)
+        text2.change_font(font)
 
-    #    box = TextBox()
-    #    box.add(text)
-    #    box.add(text2)
+        box = TextBox()
+        box.add(text)
+        box.add(text2)
 
-    #    slide.add_textbox(
-    #        StartPoint(0, 1000),
-    #        Size(100, 500),
-    #        box,
-    #    )
+        slide.add_textbox(
+            StartPoint(0, 1000),
+            Size(100, 500),
+            box,
+        )
 
-    #    sut = SlideConvertor(mock)
-    #    sut.convert(slide)
+        sut = SlideConvertor(mock)
+        sut.convert(slide)
 
-    #    self.assertEqual(mock.shapes.textboxs[0]["left"], 0)
-    #    self.assertEqual(mock.shapes.textboxs[0]["top"], 0)
-    #    self.assertEqual(mock.shapes.textboxs[0]["width"], 300)
-    #    self.assertEqual(mock.shapes.textboxs[0]["height"], 300)
-    #    self.assertEqual(
-    #        mock.shapes.textboxs[0]["textbox"].text_frame.text, "Hello World"
-    #    )
-    #    self.assertEqual(mock.shapes.textboxs[0]["textbox"].text_frame.font.size, 28)
-    #    self.assertEqual(mock.shapes.textboxs[0]["textbox"].text_frame.font.bold, True)
-    #    self.assertEqual(
-    #        mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1], "Good Bye"
-    #    )
-    #    self.assertEqual(
-    #        mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.size, 18
-    #    )
-    #    self.assertEqual(
-    #        mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.bold, False
-    #    )
+        self.assertEqual(mock.shapes.textboxs[0]["left"], 0)
+        self.assertEqual(mock.shapes.textboxs[0]["top"], 0)
+        self.assertEqual(mock.shapes.textboxs[0]["width"], 300)
+        self.assertEqual(mock.shapes.textboxs[0]["height"], 300)
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.text, "Hello World"
+        )
+        self.assertEqual(mock.shapes.textboxs[0]["textbox"].text_frame.font.size, 28)
+        self.assertEqual(mock.shapes.textboxs[0]["textbox"].text_frame.font.bold, True)
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].text, "Good Bye"
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.size, 18
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.bold, False
+        )
 
-    #    self.assertEqual(mock.shapes.textboxs[1]["left"], 0)
-    #    self.assertEqual(mock.shapes.textboxs[1]["top"], 1000)
-    #    self.assertEqual(mock.shapes.textboxs[1]["width"], 100)
-    #    self.assertEqual(mock.shapes.textboxs[1]["height"], 500)
-    #    self.assertEqual(
-    #        mock.shapes.textboxs[1]["textbox"].text_frame.text, "Rust Good Language"
-    #    )
-    #    self.assertEqual(mock.shapes.textboxs[1]["textbox"].text_frame.font.size, 28)
-    #    self.assertEqual(mock.shapes.textboxs[1]["textbox"].text_frame.font.bold, True)
+        self.assertEqual(mock.shapes.textboxs[1]["left"], 0)
+        self.assertEqual(mock.shapes.textboxs[1]["top"], 1000)
+        self.assertEqual(mock.shapes.textboxs[1]["width"], 100)
+        self.assertEqual(mock.shapes.textboxs[1]["height"], 500)
+        self.assertEqual(
+            mock.shapes.textboxs[1]["textbox"].text_frame.text, "Rust Good Language"
+        )
+        self.assertEqual(mock.shapes.textboxs[1]["textbox"].text_frame.font.size, 28)
+        self.assertEqual(mock.shapes.textboxs[1]["textbox"].text_frame.font.bold, True)
+        self.assertEqual(
+            mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[1].text,
+            "Python Good Language.But I love Rust more than Python",
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[1].font.size, 18
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[1].font.bold, False
+        )
 
 
 if __name__ == "__main__":
