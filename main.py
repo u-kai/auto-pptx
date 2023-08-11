@@ -18,7 +18,7 @@ def main():
     text = Text("Good Bye")
     box.add(text)
 
-    slide.add_textbox(StartPoint(500, 500), Size(300, 300), box)
+    slide.add_textbox(StartPoint(50, 50), Size(30, 30), box)
 
     box = TextBox()
     text = Text("Rust Good Language")
@@ -29,7 +29,7 @@ def main():
     text = Text("Python Good Language.But I love Rust more than Python")
     box.add(text)
 
-    slide.add_textbox(StartPoint(0, 1000), Size(100, 500), box)
+    slide.add_textbox(StartPoint(150, 150), Size(100, 500), box)
 
     p.add_slide(slide)
     p.save()

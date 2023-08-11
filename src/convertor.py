@@ -11,10 +11,10 @@ class SlideConvertor:
     def convert(self, slide: Slide):
         for textbox in slide.textboxs:
             converted_box = self.pptx_slide_api.shapes.add_textbox(
-                textbox.start_point.left,
-                textbox.start_point.top,
-                textbox.size.width,
-                textbox.size.height,
+                Pt(textbox.start_point.left),
+                Pt(textbox.start_point.top),
+                Pt(textbox.size.width),
+                Pt(textbox.size.height),
             )
             text_frame = converted_box.text_frame
             text_frame.text = ""

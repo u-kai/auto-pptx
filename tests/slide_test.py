@@ -108,8 +108,8 @@ class TestSlideConvertor(unittest.TestCase):
 
         self.assertEqual(mock.shapes.textboxs[0]["left"], 0)
         self.assertEqual(mock.shapes.textboxs[0]["top"], 0)
-        self.assertEqual(mock.shapes.textboxs[0]["width"], 300)
-        self.assertEqual(mock.shapes.textboxs[0]["height"], 300)
+        self.assertEqual(mock.shapes.textboxs[0]["width"], Pt(300))
+        self.assertEqual(mock.shapes.textboxs[0]["height"], Pt(300))
         self.assertEqual(
             mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].text,
             "Hello World",
@@ -151,8 +151,8 @@ class TestSlideConvertor(unittest.TestCase):
         sut.convert(slide)
 
         self.assertEqual(mock.shapes.textboxs[0]["left"], 0)
-        self.assertEqual(mock.shapes.textboxs[0]["top"], 1000)
-        self.assertEqual(mock.shapes.textboxs[0]["width"], 300)
+        self.assertEqual(mock.shapes.textboxs[0]["top"], Pt(1000))
+        self.assertEqual(mock.shapes.textboxs[0]["width"], Pt(300))
         self.assertEqual(mock.shapes.textboxs[0]["height"], 0)
         self.assertEqual(
             mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].text,
@@ -229,8 +229,8 @@ class TestSlideConvertor(unittest.TestCase):
 
         self.assertEqual(mock.shapes.textboxs[0]["left"], 0)
         self.assertEqual(mock.shapes.textboxs[0]["top"], 0)
-        self.assertEqual(mock.shapes.textboxs[0]["width"], 300)
-        self.assertEqual(mock.shapes.textboxs[0]["height"], 300)
+        self.assertEqual(mock.shapes.textboxs[0]["width"], Pt(300))
+        self.assertEqual(mock.shapes.textboxs[0]["height"], Pt(300))
         self.assertEqual(
             mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].text,
             "Hello World",
@@ -254,9 +254,9 @@ class TestSlideConvertor(unittest.TestCase):
         )
 
         self.assertEqual(mock.shapes.textboxs[1]["left"], 0)
-        self.assertEqual(mock.shapes.textboxs[1]["top"], 1000)
-        self.assertEqual(mock.shapes.textboxs[1]["width"], 100)
-        self.assertEqual(mock.shapes.textboxs[1]["height"], 500)
+        self.assertEqual(mock.shapes.textboxs[1]["top"], Pt(1000))
+        self.assertEqual(mock.shapes.textboxs[1]["width"], Pt(100))
+        self.assertEqual(mock.shapes.textboxs[1]["height"], Pt(500))
         self.assertEqual(
             mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[0].text,
             "Rust Good Language",
