@@ -95,6 +95,12 @@ class RecText:
     def add_child(self, text: Text):
         self._children.append(RecText(text))
 
+    def bold(self):
+        return self.text.bold
+
+    def size(self):
+        return self.text.size()
+
     def child(self, index: int):
         if index >= len(self._children):
             return None

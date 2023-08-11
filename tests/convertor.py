@@ -63,6 +63,45 @@ class MockPPTXSlideApi:
         return
 
 
+class TestSlideConvertorListTexts(unittest.TestCase):
+    def test_slideからtext_listを取得して変換可能(self):
+        # 3rd party library mock
+        mock = MockPPTXSlideApi()
+        # My types
+        text = Text("Root")
+        font = Font.meiryo_ui()
+        font.change_size(28)
+        text.change_font(font)
+        text.to_bold()
+
+        list = ListText(text)
+
+        slide = Slide()
+        slide.add_list_text(StartPoint(0, 0), Size(300, 300), list)
+
+        sut = SlideConvertor(mock)
+        sut.convert(slide)
+
+        self.assertEqual(mock.shapes.textboxs[0]["left"], 0)
+        self.assertEqual(mock.shapes.textboxs[0]["top"], 0)
+        self.assertEqual(mock.shapes.textboxs[0]["width"], Pt(300))
+        self.assertEqual(mock.shapes.textboxs[0]["height"], Pt(300))
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].text, "Root"
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].font.size,
+            Pt(28),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].font.bold,
+            True,
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].level, 0
+        )
+
+
 class TestSlideConvertorTextboxs(unittest.TestCase):
     def test_slideからtextboxを取得して変換可能(self):
         # 3rd party library mock

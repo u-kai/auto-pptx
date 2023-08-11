@@ -1,4 +1,5 @@
-from src.slide import Slide
+from src.slide import Slide, StartPoint, Size
+from src.components import TextBox, ListText
 from pptx.util import Pt
 from pptx.enum.text import MSO_AUTO_SIZE
 
@@ -9,19 +10,38 @@ class SlideConvertor:
         return
 
     def convert(self, slide: Slide):
-        self.__convert_textbox(slide)
+        self.__convert_list_text(slide.list_texts)
+        self.__convert_textbox(slide.textboxs)
         return
 
-    def __convert_textbox(self, slide: Slide):
-        for textbox in slide.textboxs:
-            converted_box = self.pptx_slide_api.shapes.add_textbox(
-                Pt(textbox.start_point.left),
-                Pt(textbox.start_point.top),
-                Pt(textbox.size.width),
-                Pt(textbox.size.height),
-            )
+    def __convert_list_text(self, list_texts: [ListText]):
+        for list_text in list_texts:
+            converted_box = self.__add_textbox(list_text.start_point, list_text.size)
             text_frame = converted_box.text_frame
             text_frame.text = ""
+
+            if list_text is None or list_text.value is None:
+                continue
+
+            for i, text in enumerate(list_text.value.lists()):
+                paragraph = text_frame.add_paragraph()
+                paragraph.text = text.str()
+                paragraph.font.bold = text.bold()
+                paragraph.font.size = Pt(text.size())
+                paragraph.level = i
+            text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
+
+        return
+
+    def __convert_textbox(self, textboxes: [TextBox]):
+        for textbox in textboxes:
+            converted_box = self.__add_textbox(textbox.start_point, textbox.size)
+            text_frame = converted_box.text_frame
+            text_frame.text = ""
+
+            if textbox is None or textbox.value is None:
+                continue
+
             for i, text in enumerate(textbox.value.texts):
                 paragraph = text_frame.add_paragraph()
                 paragraph.text = text.str()
@@ -29,3 +49,11 @@ class SlideConvertor:
                 paragraph.font.size = Pt(text.size())
             text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
         return
+
+    def __add_textbox(self, start_point: StartPoint, size: Size):
+        return self.pptx_slide_api.shapes.add_textbox(
+            Pt(start_point.left),
+            Pt(start_point.top),
+            Pt(size.width),
+            Pt(size.height),
+        )
