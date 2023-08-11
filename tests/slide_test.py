@@ -1,7 +1,7 @@
 import unittest
 from src.slide import Slide, StartPoint, Size
 from src.convertor import SlideConvertor
-from src.components import TextBox, Text, Font, FontSize
+from src.components import TextBox, Text, Font
 
 
 class TestSlide(unittest.TestCase):
@@ -90,8 +90,9 @@ class TestSlideConvertor(unittest.TestCase):
         mock = MockPPTXSlideApi()
         # My types
         text = Text("Hello World")
-        text.change_font(Font.meiryo_ui())
-        text.change_size(FontSize(28))
+        font = Font.meiryo_ui()
+        font.change_size(28)
+        text.change_font(font)
         text.to_bold()
 
         box = TextBox()

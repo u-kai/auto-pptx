@@ -1,34 +1,28 @@
 class Font:
-    def __init__(self, font: str):
+    def __init__(self, font: str, size: int):
         self.font = font
-
-    def meiryo():
-        return Font("Meiryo")
-
-    def meiryo_ui():
-        return Font("Meiryo UI")
-
-    def __eq__(self, other):
-        return self.font == other.font
-
-
-class FontSize:
-    def __init__(self, size: int):
         self.size = size
 
-    def default():
-        DEFAULT_SIZE = 18
-        return FontSize(DEFAULT_SIZE)
+    def __DEFAULT_SIZE():
+        return 18
+
+    def meiryo():
+        return Font("Meiryo", Font.__DEFAULT_SIZE())
+
+    def meiryo_ui():
+        return Font("Meiryo UI", Font.__DEFAULT_SIZE)
+
+    def change_size(self, size: int):
+        self.size = size
 
     def __eq__(self, other):
-        return self.size == other.size
+        return self.font == other.font and self.size == other.size
 
 
 class Text:
     def __init__(self, text: str):
         self.text = text
         self.font = Font.meiryo()
-        self._size = FontSize.default()
         self.bold = False
         return
 
@@ -36,16 +30,19 @@ class Text:
         return self.text
 
     def size(self) -> int:
-        return self._size.size
+        return self.font.size
 
     def change_font(self, font: Font):
         self.font = font
+        return
 
-    def change_size(self, size: FontSize):
-        self._size = size
+    def change_size(self, size: int):
+        self.font.size = size
+        return
 
     def to_bold(self):
         self.bold = True
+        return
 
     def __eq__(self, other) -> bool:
         return (

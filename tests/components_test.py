@@ -1,5 +1,5 @@
 import unittest
-from src.components import TextBox, Text, Font, FontSize, ListText
+from src.components import TextBox, Text, Font, ListText
 
 
 class TestText(unittest.TestCase):
@@ -20,11 +20,11 @@ class TestText(unittest.TestCase):
 
         sut = Text("Hello World")
 
-        self.assertEqual(sut.size(), FontSize(18).size)
+        self.assertEqual(sut.size(), 18)
 
-        sut.change_size(FontSize(28))
+        sut.change_size(28)
 
-        self.assertEqual(sut.size(), FontSize(28).size)
+        self.assertEqual(sut.size(), 28)
 
     def test_textはboldにすることができる(self):
 
