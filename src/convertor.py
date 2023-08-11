@@ -9,6 +9,10 @@ class SlideConvertor:
         return
 
     def convert(self, slide: Slide):
+        self.__convert_textbox(slide)
+        return
+
+    def __convert_textbox(self, slide: Slide):
         for textbox in slide.textboxs:
             converted_box = self.pptx_slide_api.shapes.add_textbox(
                 Pt(textbox.start_point.left),

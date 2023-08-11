@@ -82,7 +82,7 @@ class MockPPTXSlideApi:
         return
 
 
-class TestSlideConvertor(unittest.TestCase):
+class TestSlideConvertor_textboxs(unittest.TestCase):
     def test_slideからtextboxを取得して変換可能(self):
         # 3rd party library mock
         mock = MockPPTXSlideApi()
