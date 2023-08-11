@@ -1,4 +1,5 @@
 from src.slide import Slide
+from pptx.util import Pt
 
 
 class SlideConvertor:
@@ -17,13 +18,8 @@ class SlideConvertor:
             text_frame = converted_box.text_frame
 
             for i, text in enumerate(textbox.value.texts):
-                if i == 0:
-                    text_frame.text = text.str()
-                    text_frame.fit_text(text.font.font, text.size(), text.bold)
-                    continue
-
                 paragraph = text_frame.add_paragraph()
                 paragraph.text = text.str()
                 paragraph.font.bold = text.bold
-                paragraph.font.size = text.size()
+                paragraph.font.size = Pt(text.size())
         return

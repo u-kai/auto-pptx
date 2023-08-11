@@ -2,6 +2,7 @@ import unittest
 from src.slide import Slide, StartPoint, Size
 from src.convertor import SlideConvertor
 from src.components import TextBox, Text, Font
+from pptx.util import Pt
 
 
 class TestSlide(unittest.TestCase):
@@ -27,7 +28,7 @@ class TestSlide(unittest.TestCase):
 class MockPPTXFont:
     def __init__(self):
         self.bold = False
-        self.size = 18
+        self.size = Pt(18)
         return
 
 
@@ -40,23 +41,13 @@ class MockPPTXParagraph:
 
 class MockPPTXTextFrame:
     def __init__(self):
-        self.font_family = "Calibri"
-        self.default = MockPPTXParagraph()
-        self.text = self.default.text
-        self.font = self.default.font
-        self.paragraphs = [self.default]
+        self.paragraphs = []
         return
 
     def add_paragraph(self):
         para = MockPPTXParagraph()
         self.paragraphs.append(para)
         return para
-
-    def fit_text(self, font_family: str, max_size: int, bold: bool):
-        self.font_family = font_family
-        self.font.bold = bold
-        self.font.size = max_size
-        return
 
 
 class MockPPTXTextBox:
@@ -120,10 +111,16 @@ class TestSlideConvertor(unittest.TestCase):
         self.assertEqual(mock.shapes.textboxs[0]["width"], 300)
         self.assertEqual(mock.shapes.textboxs[0]["height"], 300)
         self.assertEqual(
-            mock.shapes.textboxs[0]["textbox"].text_frame.text, "Hello World"
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].text,
+            "Hello World",
         )
-        self.assertEqual(mock.shapes.textboxs[0]["textbox"].text_frame.font.size, 28)
-        self.assertEqual(mock.shapes.textboxs[0]["textbox"].text_frame.font.bold, True)
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].font.size,
+            Pt(28),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].font.bold, True
+        )
 
     def test_slideから複数textが格納されているtextboxを取得して変換可能(self):
         # 3rd party library mock
@@ -158,16 +155,23 @@ class TestSlideConvertor(unittest.TestCase):
         self.assertEqual(mock.shapes.textboxs[0]["width"], 300)
         self.assertEqual(mock.shapes.textboxs[0]["height"], 0)
         self.assertEqual(
-            mock.shapes.textboxs[0]["textbox"].text_frame.text, "Hello World"
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].text,
+            "Hello World",
         )
-        self.assertEqual(mock.shapes.textboxs[0]["textbox"].text_frame.font.size, 28)
-        self.assertEqual(mock.shapes.textboxs[0]["textbox"].text_frame.font.bold, True)
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].font.size,
+            Pt(28),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].font.bold, True
+        )
 
         self.assertEqual(
             mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].text, "Good Bye"
         )
         self.assertEqual(
-            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.size, 18
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.size,
+            Pt(18),
         )
         self.assertEqual(
             mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.bold, False
@@ -228,15 +232,22 @@ class TestSlideConvertor(unittest.TestCase):
         self.assertEqual(mock.shapes.textboxs[0]["width"], 300)
         self.assertEqual(mock.shapes.textboxs[0]["height"], 300)
         self.assertEqual(
-            mock.shapes.textboxs[0]["textbox"].text_frame.text, "Hello World"
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].text,
+            "Hello World",
         )
-        self.assertEqual(mock.shapes.textboxs[0]["textbox"].text_frame.font.size, 28)
-        self.assertEqual(mock.shapes.textboxs[0]["textbox"].text_frame.font.bold, True)
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].font.size,
+            Pt(28),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].font.bold, True
+        )
         self.assertEqual(
             mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].text, "Good Bye"
         )
         self.assertEqual(
-            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.size, 18
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.size,
+            Pt(18),
         )
         self.assertEqual(
             mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.bold, False
@@ -247,16 +258,23 @@ class TestSlideConvertor(unittest.TestCase):
         self.assertEqual(mock.shapes.textboxs[1]["width"], 100)
         self.assertEqual(mock.shapes.textboxs[1]["height"], 500)
         self.assertEqual(
-            mock.shapes.textboxs[1]["textbox"].text_frame.text, "Rust Good Language"
+            mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[0].text,
+            "Rust Good Language",
         )
-        self.assertEqual(mock.shapes.textboxs[1]["textbox"].text_frame.font.size, 28)
-        self.assertEqual(mock.shapes.textboxs[1]["textbox"].text_frame.font.bold, True)
+        self.assertEqual(
+            mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[0].font.size,
+            Pt(28),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[0].font.bold, True
+        )
         self.assertEqual(
             mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[1].text,
             "Python Good Language.But I love Rust more than Python",
         )
         self.assertEqual(
-            mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[1].font.size, 18
+            mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[1].font.size,
+            Pt(18),
         )
         self.assertEqual(
             mock.shapes.textboxs[1]["textbox"].text_frame.paragraphs[1].font.bold, False
