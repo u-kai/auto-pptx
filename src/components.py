@@ -84,7 +84,7 @@ class ListText:
         self.top(index).add_child(child)
 
     def __eq__(self, other) -> bool:
-        return self.lists() == other.lists() and self._child == other._child
+        return self.lists() == other.lists()
 
 
 class RecText:

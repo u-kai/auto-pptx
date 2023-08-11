@@ -1,7 +1,7 @@
 import unittest
 from src.slide import Slide, StartPoint, Size
 from src.convertor import SlideConvertor
-from src.components import TextBox, Text, Font
+from src.components import TextBox, Text, Font, ListText
 from pptx.util import Pt
 
 
@@ -24,6 +24,24 @@ class TestSlide(unittest.TestCase):
         self.assertEqual(sut.textboxs[0].size, size)
         self.assertEqual(sut.textboxs[0].value, box)
 
+    def test_slideにlist_textを追加可能(self):
+        sut = Slide()
+        list_text = ListText(Text("Root"))
+        list_text.add_child_to(0, Text("Parent"))
+        list_text.top(0).child(0).add_child(Text("Child"))
+        left = 0
+        top = 0
+        point = StartPoint(left, top)
+        width = 300
+        height = 300
+        size = Size(width, height)
+
+        sut.add_list_text(point, size, list_text)
+
+        self.assertEqual(sut.list_texts[0].start_point, point)
+        self.assertEqual(sut.list_texts[0].size, size)
+        self.assertEqual(sut.list_texts[0].value, list_text)
+
 
 class MockPPTXFont:
     def __init__(self):
@@ -36,6 +54,7 @@ class MockPPTXParagraph:
     def __init__(self):
         self.font = MockPPTXFont()
         self.text = ""
+        self.level = 0
         return
 
 

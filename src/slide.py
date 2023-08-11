@@ -1,4 +1,4 @@
-from src.components import TextBox
+from src.components import TextBox, ListText
 from dataclasses import dataclass
 
 
@@ -23,9 +23,14 @@ class Component:
 
 class Slide:
     def __init__(self):
-        self.textboxs: [TextBox] = []
+        self.textboxs: [Component] = []
+        self.list_texts: [Component] = []
         return
 
     def add_textbox(self, point: StartPoint, size: Size, textbox: TextBox):
         self.textboxs.append(Component(point, size, textbox))
+        return
+
+    def add_list_text(self, point: StartPoint, size: Size, list_text: ListText):
+        self.list_texts.append(Component(point, size, list_text))
         return
