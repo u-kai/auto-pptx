@@ -20,11 +20,11 @@ class TestText(unittest.TestCase):
 
         sut = Text("Hello World")
 
-        self.assertEqual(sut.size, FontSize(18))
+        self.assertEqual(sut.size(), FontSize(18).size)
 
         sut.change_size(FontSize(28))
 
-        self.assertEqual(sut.size, FontSize(28))
+        self.assertEqual(sut.size(), FontSize(28).size)
 
     def test_textはboldにすることができる(self):
 
