@@ -101,6 +101,93 @@ class TestSlideConvertorListTexts(unittest.TestCase):
             mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].level, 0
         )
 
+    def test_slideからtext_listを再起的に取得して変換可能(self):
+        # 3rd party library mock
+        mock = MockPPTXSlideApi()
+        # My types
+        text = Text("Root")
+        font = Font.meiryo_ui()
+        font.change_size(28)
+        text.change_font(font)
+        text.to_bold()
+
+        list = ListText(text)
+
+        text = Text("Parent")
+        list.add_child_to(0, text)
+
+        text = Text("Child")
+        list.top(0).child(0).add_child(text)
+
+        text = Text("GrandChild")
+        list.top(0).child(0).child(0).add_child(text)
+
+        slide = Slide()
+        slide.add_list_text(StartPoint(0, 0), Size(300, 300), list)
+
+        sut = SlideConvertor(mock)
+        sut.convert(slide)
+
+        self.assertEqual(mock.shapes.textboxs[0]["left"], 0)
+        self.assertEqual(mock.shapes.textboxs[0]["top"], 0)
+        self.assertEqual(mock.shapes.textboxs[0]["width"], Pt(300))
+        self.assertEqual(mock.shapes.textboxs[0]["height"], Pt(300))
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].text, "Root"
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].font.size,
+            Pt(28),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].font.bold,
+            True,
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[0].level, 0
+        )
+
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].text, "Parent"
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.size,
+            Pt(18),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].font.bold,
+            False,
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[1].level, 1
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[2].text, "Child"
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[2].font.size,
+            Pt(18),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[2].font.bold,
+            False,
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[2].level, 2
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[3].text,
+            "GrandChild",
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[3].font.size,
+            Pt(18),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[3].font.bold,
+            False,
+        )
+
 
 class TestSlideConvertorTextboxs(unittest.TestCase):
     def test_slideからtextboxを取得して変換可能(self):

@@ -101,6 +101,9 @@ class RecText:
     def size(self):
         return self.text.size()
 
+    def children(self):
+        return self._children
+
     def child(self, index: int):
         if index >= len(self._children):
             return None

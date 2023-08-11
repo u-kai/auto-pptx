@@ -1,6 +1,6 @@
 from src.pptx import PPTX
 from src.slide import Slide, StartPoint, Size
-from src.components import TextBox, Text
+from src.components import TextBox, Text, ListText
 
 
 def main():
@@ -19,17 +19,15 @@ def main():
     box.add(text)
 
     slide.add_textbox(StartPoint(50, 50), Size(30, 30), box)
-
-    box = TextBox()
     text = Text("Rust Good Language")
     text.to_bold()
     text.change_size(28)
-    box.add(text)
+    list = ListText(text)
+    list.add_siblings(Text("Python Good Language.But I love Rust more than Python"))
+    list.add_child_to(0, Text("C++ Good Language"))
+    list.top(0).child(0).add_child(Text("C Good Language"))
 
-    text = Text("Python Good Language.But I love Rust more than Python")
-    box.add(text)
-
-    slide.add_textbox(StartPoint(150, 150), Size(100, 500), box)
+    slide.add_list_text(StartPoint(150, 150), Size(100, 500), list)
 
     p.add_slide(slide)
     p.save()
