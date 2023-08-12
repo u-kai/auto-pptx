@@ -1,4 +1,4 @@
-from src.convertor import SlideConvertor
+from src.convertors.slide import SlideConvertor
 from src.components import TextBox, Text, Font, ListText
 from pptx.util import Pt
 from src.slide import Slide, StartPoint, Size

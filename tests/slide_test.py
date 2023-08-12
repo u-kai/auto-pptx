@@ -11,8 +11,8 @@ class TestSlide(unittest.TestCase):
         sut = Slide.blank()
         self.assertEqual(sut.template, SlideType.BLANK)
 
-        sut = Slide.only_title()
-        self.assertEqual(sut.template, SlideType.ONLY_TITLE)
+        sut = Slide.title_only()
+        self.assertEqual(sut.template, SlideType.TITLE_ONLY)
 
     def test_slideにtext_boxを追加可能(self):
         sut = Slide()

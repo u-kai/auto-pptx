@@ -3,9 +3,15 @@ from dataclasses import dataclass
 
 
 class SlideType:
-    ONLY_TITLE = "ONLY_TITLE"
+    TITLE_SLIDE = "TITLE_SLIDE"
     TITLE_AND_CONTENT = "TITLE_AND_CONTENT"
+    SECTION_HEADER = "SECTION_HEADER"
+    TWO_CONTENT = "TWO_CONTENT"
+    COMPARISON = "COMPARISON"
+    TITLE_ONLY = "TITLE_ONLY"
     BLANK = "BLANK"
+    CONTENT_WITH_CAPTION = "CONTENT_WITH_CAPTION"
+    PICTURE_WITH_CAPTION = "PICTURE_WITH_CAPTION"
 
 
 @dataclass
@@ -34,9 +40,34 @@ class Slide:
         self.template = SlideType.BLANK
         return
 
-    def only_title():
+    def title_slide():
         this = Slide()
-        this.template = SlideType.ONLY_TITLE
+        this.template = SlideType.TITLE_SLIDE
+        return this
+
+    def title_and_content():
+        this = Slide()
+        this.template = SlideType.TITLE_AND_CONTENT
+        return this
+
+    def section_header():
+        this = Slide()
+        this.template = SlideType.SECTION_HEADER
+        return this
+
+    def two_content():
+        this = Slide()
+        this.template = SlideType.TWO_CONTENT
+        return this
+
+    def comparison():
+        this = Slide()
+        this.template = SlideType.COMPARISON
+        return this
+
+    def title_only():
+        this = Slide()
+        this.template = SlideType.TITLE_ONLY
         return this
 
     def blank():
@@ -44,9 +75,14 @@ class Slide:
         this.template = SlideType.BLANK
         return this
 
-    def title_and_content():
+    def content_with_caption():
         this = Slide()
-        this.template = SlideType.TITLE_AND_CONTENT
+        this.template = SlideType.CONTENT_WITH_CAPTION
+        return this
+
+    def picture_with_caption():
+        this = Slide()
+        this.template = SlideType.PICTURE_WITH_CAPTION
         return this
 
     def add_textbox(self, point: StartPoint, size: Size, textbox: TextBox):

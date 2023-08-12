@@ -3,7 +3,7 @@ import collections.abc
 from pptx import Presentation
 
 from src.slide import Slide
-from src.convertor import SlideConvertor
+from src.convertors.slide import SlideConvertor
 
 
 class PPTX:
