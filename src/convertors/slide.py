@@ -1,5 +1,8 @@
 from src.slide import Slide, StartPoint, Size
 from src.components import TextBox, ListText, RecText
+from src.placeholders import AbstractPlaceHolder, PlaceHolderType
+
+
 from pptx.util import Pt
 from pptx.enum.text import MSO_AUTO_SIZE
 
@@ -10,9 +13,20 @@ class SlideConvertor:
         return
 
     def convert(self, slide: Slide):
+        self.__convert_placeholder(slide.placeholders)
         self.__convert_list_text(slide.list_texts)
         self.__convert_textbox(slide.textboxs)
         return
+
+    def __convert_placeholder(self, placeholders: [AbstractPlaceHolder]):
+        def __case_title(pptx_slide_api, placeholder: AbstractPlaceHolder):
+            for pptx_placeholder in self.pptx_slide_api.placeholders:
+                if "Title" in pptx_placeholder.name:
+                    pptx_placeholder.text += placeholder.value
+
+        for placeholder in placeholders:
+            if placeholder.type == PlaceHolderType.TITLE:
+                __case_title(self.pptx_slide_api, placeholder)
 
     def __convert_list_text(self, list_texts: [ListText]):
         def children(text_frame, parent: RecText, i: int):

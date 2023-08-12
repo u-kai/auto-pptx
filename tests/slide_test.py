@@ -1,9 +1,17 @@
 import unittest
 from src.slide import Slide, StartPoint, Size, SlideType
 from src.components import TextBox, Text, ListText
+from src.placeholders import PlaceHolder, PlaceHolderType
 
 
 class TestSlide(unittest.TestCase):
+    def test_slideはplaceholderを埋め込むことができる(self):
+        sut = Slide.title_slide()
+        sut.add_placeholder(PlaceHolder.title("Hello World"))
+
+        self.assertEqual(sut.placeholders[0].value, "Hello World")
+        self.assertEqual(sut.placeholders[0].type, PlaceHolderType.TITLE)
+
     def test_slideの雛形を選択可能(self):
         sut = Slide.title_and_content()
         self.assertEqual(sut.template, SlideType.TITLE_AND_CONTENT)

@@ -1,5 +1,6 @@
 from src.components import TextBox, ListText
 from dataclasses import dataclass
+from src.placeholders import AbstractPlaceHolder
 
 
 class SlideType:
@@ -37,8 +38,23 @@ class Slide:
     def __init__(self):
         self.textboxs: [Component] = []
         self.list_texts: [Component] = []
+        self.placeholders: [AbstractPlaceHolder] = []
         self.template = SlideType.BLANK
         return
+
+    def add_textbox(self, point: StartPoint, size: Size, textbox: TextBox):
+        self.textboxs.append(Component(point, size, textbox))
+        return
+
+    def add_list_text(self, point: StartPoint, size: Size, list_text: ListText):
+        self.list_texts.append(Component(point, size, list_text))
+        return
+
+    def add_placeholder(self, placeholder: AbstractPlaceHolder):
+        self.placeholders.append(placeholder)
+        return
+
+    ####################### Factory Methods #######################
 
     def title_slide():
         this = Slide()
@@ -84,11 +100,3 @@ class Slide:
         this = Slide()
         this.template = SlideType.PICTURE_WITH_CAPTION
         return this
-
-    def add_textbox(self, point: StartPoint, size: Size, textbox: TextBox):
-        self.textboxs.append(Component(point, size, textbox))
-        return
-
-    def add_list_text(self, point: StartPoint, size: Size, list_text: ListText):
-        self.list_texts.append(Component(point, size, list_text))
-        return
