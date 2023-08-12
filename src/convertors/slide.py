@@ -55,32 +55,47 @@ class PlaceHolderConvertor:
 
         return
 
-    def __case_title(self, placeholder: TitlePlaceHolder):
+    def __case_any(self, placeholder: AbstractPlaceHolder, pptx_placeholder_name, func):
         for pptx_placeholder in self.placeholders:
-            if PlaceHolderPiceOfName.TITLE in pptx_placeholder.name:
-                pptx_placeholder.text = placeholder.value
+            if pptx_placeholder_name in pptx_placeholder.name:
+                func(pptx_placeholder, placeholder)
                 return
+
+    def __case_title(self, placeholder: TitlePlaceHolder):
+        def f(pptx_placeholder, placeholder):
+            pptx_placeholder.text = placeholder.value
+            return
+
+        self.__case_any(placeholder, PlaceHolderPiceOfName.TITLE, f)
 
     def __case_content(self, placeholder: ContentPlaceHolder):
-        for pptx_placeholder in self.placeholders:
-            if PlaceHolderPiceOfName.CONTENT_PLACEHOLDER in pptx_placeholder.name:
-                pptx_placeholder.text = placeholder.value[0]
-                for i in range(1, len(placeholder.value)):
-                    para = pptx_placeholder.text_frame.add_paragraph()
-                    para.text = placeholder.value[i]
+        def f(pptx_placeholder, placeholder):
+            pptx_placeholder.text = placeholder.value[0]
+            for i in range(1, len(placeholder.value)):
+                para = pptx_placeholder.text_frame.add_paragraph()
+                para.text = placeholder.value[i]
                 return
 
+        self.__case_any(placeholder, PlaceHolderPiceOfName.CONTENT_PLACEHOLDER, f)
+
     def __case_list_content(self, placeholder: ListContentPlaceHolder):
-        for pptx_placeholder in self.placeholders:
-            if PlaceHolderPiceOfName.CONTENT_PLACEHOLDER in pptx_placeholder.name:
-                list_text: ListText = placeholder.value
-                parents = list_text.lists()
+        def f(pptx_placeholder, placeholder):
+            def set_first_text_and_add_rec(pptx_placeholder, parents: [RecText]):
+                parent = parents[0]
                 pptx_placeholder.text = parents[0].str()
                 text_frame = pptx_placeholder.text_frame
-                add_text_frame_rec(text_frame, parents[0], 1)
+                add_text_frame_rec(text_frame, parent, 1)
+
                 for i in range(1, len(parents)):
                     add_text_frame_rec(text_frame, parents[i], 1)
                 return
+
+            list_text: ListText = placeholder.value
+            parents = list_text.lists()
+            set_first_text_and_add_rec(pptx_placeholder, parents)
+            return
+
+        self.__case_any(placeholder, PlaceHolderPiceOfName.CONTENT_PLACEHOLDER, f)
 
 
 class SlideConvertor:
