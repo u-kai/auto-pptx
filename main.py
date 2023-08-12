@@ -1,21 +1,14 @@
 from src.pptx import PPTX
 from src.slide import Slide, StartPoint, Size
 from src.components import TextBox, Text, ListText
+from src.placeholders import PlaceHolder
 
 
 def main():
-
     filename = "hello.pptx"
     p = PPTX(filename)
     title_slide = Slide.title_slide()
-    box = TextBox()
-    text = Text("Hello World")
-    text.to_bold()
-    text.change_size(28)
-    box.add(text)
-    text = Text("Good Bye")
-    box.add(text)
-    title_slide.add_textbox(StartPoint(50, 50), Size(30, 30), box)
+    title_slide.add_placeholder(PlaceHolder.title("Hello World"))
 
     title_and_content_slide = Slide.title_and_content()
     text = Text("Rust Good Language")
