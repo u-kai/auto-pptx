@@ -2,7 +2,7 @@ from src.convertors.slide import SlideConvertor
 from src.components import TextBox, Text, Font, ListText
 from pptx.util import Pt
 from src.slide import Slide, StartPoint, Size
-from src.placeholders import TitlePlaceHolder,ObjectPlaceHolder
+from src.placeholders import TitlePlaceHolder,ContentPlaceHolder
 import unittest
 
 
@@ -64,6 +64,12 @@ class MockSubTitlePlaceHolder():
         self.text = ""
         return
 
+class MockContntPlaceHolder():
+    def __init__(self,num:int):
+        self.name = "Content Placeholder "+str(num)
+        self.text = ""
+        self.text_frame = MockPPTXTextFrame()
+        return
 
 class MockTitlePlaceHolder():
     def __init__(self):
@@ -80,7 +86,27 @@ class MockPPTXSlideApi:
 
 
 class TestSlideConvertorPlaceHolder(unittest.TestCase):
-    def test_slideからplaceholderを取得して変換可能(self):
+    def test_slideからcontent_placeholderを取得して変換可能(self):
+        # 3rd party library mock
+        mock = MockPPTXSlideApi()
+        mock.placeholders = [MockTitlePlaceHolder(),MockContntPlaceHolder(2)]
+        # My types
+        contents = ContentPlaceHolder()
+        contents.add("Hello World")
+        contents.add("Good Bye")
+        slide = Slide.title_and_content()
+        slide.add_placeholder(contents)
+
+        sut = SlideConvertor(mock)
+
+        sut.convert(slide)
+        
+
+        self.assertEqual(mock.placeholders[1].text, "Hello World")
+        text_frame:MockPPTXTextFrame = mock.placeholders[1].text_frame
+        self.assertEqual(text_frame.paragraphs[0].text, "Good Bye")
+
+    def test_slideからtitle_placeholderを取得して変換可能(self):
         # 3rd party library mock
         mock = MockPPTXSlideApi()
         mock.placeholders = [MockTitlePlaceHolder(),MockSubTitlePlaceHolder()]

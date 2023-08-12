@@ -1,6 +1,11 @@
 from src.slide import Slide, StartPoint, Size
 from src.components import TextBox, ListText, RecText
-from src.placeholders import AbstractPlaceHolder, PlaceHolderType
+from src.placeholders import (
+    AbstractPlaceHolder,
+    PlaceHolderType,
+    TitlePlaceHolder,
+    ContentPlaceHolder,
+)
 
 
 from pptx.util import Pt
@@ -19,14 +24,28 @@ class SlideConvertor:
         return
 
     def __convert_placeholder(self, placeholders: [AbstractPlaceHolder]):
-        def __case_title(pptx_slide_api, placeholder: AbstractPlaceHolder):
+        def __case_title(pptx_slide_api, placeholder: TitlePlaceHolder):
             for pptx_placeholder in self.pptx_slide_api.placeholders:
                 if "Title" in pptx_placeholder.name:
                     pptx_placeholder.text += placeholder.value
+                    return
+
+        def __case_content(pptx_slide_api, placeholder: ContentPlaceHolder):
+            for pptx_placeholder in self.pptx_slide_api.placeholders:
+                if "Content Placeholder" in pptx_placeholder.name:
+                    pptx_placeholder.text = placeholder.value[0]
+                    for i in range(1, len(placeholder.value)):
+                        para = pptx_placeholder.text_frame.add_paragraph()
+                        para.text = placeholder.value[i]
+
+                    return
 
         for placeholder in placeholders:
             if placeholder.type == PlaceHolderType.TITLE:
                 __case_title(self.pptx_slide_api, placeholder)
+
+            if placeholder.type == PlaceHolderType.CONTENT:
+                __case_content(self.pptx_slide_api, placeholder)
 
     def __convert_list_text(self, list_texts: [ListText]):
         def children(text_frame, parent: RecText, i: int):

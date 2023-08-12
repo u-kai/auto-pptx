@@ -31,6 +31,15 @@ class TitlePlaceHolder:
     type: PlaceHolderType = PlaceHolderType.TITLE
 
 
+class ContentPlaceHolder:
+    def __init__(self):
+        self.value = []
+        self.type = PlaceHolderType.CONTENT
+
+    def add(self, value: str):
+        self.value.append(value)
+
+
 class ObjectPlaceHolder:
     def __init__(self):
         self.value = []
@@ -44,6 +53,9 @@ class PlaceHolder:
     def __init__(self, name: str, placeholder_type: PlaceHolderType):
         self.name = name
         self.placeholder_type = placeholder_type
+
+    def content() -> ContentPlaceHolder:
+        return ContentPlaceHolder()
 
     def title(title: str) -> TitlePlaceHolder:
         return TitlePlaceHolder(title)
