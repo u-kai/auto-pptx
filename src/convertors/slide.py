@@ -49,14 +49,13 @@ class SlideConvertor:
 
                 if len(parent.children()) == 0:
                     return
-
                 for child in parent.children():
                     paragraph = text_frame.add_paragraph()
                     paragraph.text = child.str()
                     paragraph.font.bold = child.bold()
                     paragraph.font.size = Pt(child.size())
                     paragraph.level = i
-                    children(text_frame, child, i - 1)
+                    children(text_frame, child, i + 1)
 
             for pptx_placeholder in self.pptx_slide_api.placeholders:
                 if "Content Placeholder" in pptx_placeholder.name:
