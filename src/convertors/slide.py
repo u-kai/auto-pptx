@@ -13,6 +13,25 @@ from pptx.util import Pt
 from pptx.enum.text import MSO_AUTO_SIZE
 
 
+PPTX_MAX_LEVEL = 8
+
+
+def add_text_frame_rec(text_frame, parent: RecText, i: int):
+    # pptx only support 8 level list
+    if i >= PPTX_MAX_LEVEL:
+        i = PPTX_MAX_LEVEL - 1
+
+    if len(parent.children()) == 0:
+        return
+    for child in parent.children():
+        paragraph = text_frame.add_paragraph()
+        paragraph.text = child.str()
+        paragraph.font.bold = child.bold()
+        paragraph.font.size = Pt(child.size())
+        paragraph.level = i
+        add_text_frame_rec(text_frame, child, i + 1)
+
+
 class SlideConvertor:
     def __init__(self, pptx_slide_api):
         self.pptx_slide_api = pptx_slide_api
@@ -63,7 +82,7 @@ class SlideConvertor:
                     parents = list_text.lists()
                     pptx_placeholder.text = parents[0].str()
                     text_frame = pptx_placeholder.text_frame
-                    children(text_frame, parents[0], 1)
+                    add_text_frame_rec(text_frame, parents[0], 1)
                     for i in range(1, len(parents)):
                         children(text_frame, parents[i], i)
 
