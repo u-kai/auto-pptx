@@ -13,7 +13,7 @@ class Font:
         return Font("Calibri", Font.__DEFAULT_SIZE())
 
     def meiryo_ui():
-        return Font("Meiryo UI", Font.__DEFAULT_SIZE)
+        return Font("Meiryo UI", Font.__DEFAULT_SIZE())
 
     def change_size(self, size: int):
         self.size = size
@@ -48,11 +48,7 @@ class Text:
         return
 
     def __eq__(self, other) -> bool:
-        return (
-            self.text == other.text
-            and self.font == other.font
-            and self._size == other._size
-        )
+        return self.text == other.text and self.font == other.font
 
 
 class TextBox:
