@@ -6,15 +6,17 @@ from src.slide import Slide
 class MockSlideLayout:
     def __init__(self, index):
         self.index = index
+        self.placeholders = []
 
 
 class MockSlideLayouts:
     def __init__(self):
         self.access_slide_layouts_index = []
+        self.placeholders = []
 
     def __getitem__(self, index):
         self.access_slide_layouts_index.append(MockSlideLayout(index))
-        return
+        return MockSlideLayout(index)
 
 
 class MockSlides:
@@ -25,6 +27,7 @@ class MockSlides:
     def add_slide(self, slide_layout):
         self.add_slide_time += 1
         self.add_slide_access.append(slide_layout)
+        return slide_layout
 
 
 class MockPresentation:
