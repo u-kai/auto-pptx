@@ -2,7 +2,7 @@ from src.convertors.slide import SlideConvertor
 from src.components import TextBox, Text, Font, ListText
 from pptx.util import Pt
 from src.slide import Slide, StartPoint, Size
-from src.placeholders import TitlePlaceHolder,ContentPlaceHolder
+from src.placeholders import TitlePlaceHolder,ContentPlaceHolder,ListContentPlaceHolder
 import unittest
 
 
@@ -64,6 +64,7 @@ class MockSubTitlePlaceHolder():
         self.text = ""
         return
 
+
 class MockContntPlaceHolder():
     def __init__(self,num:int):
         self.name = "Content Placeholder "+str(num)
@@ -86,6 +87,37 @@ class MockPPTXSlideApi:
 
 
 class TestSlideConvertorPlaceHolder(unittest.TestCase):
+    def test_slideからlist_contentを取得して変換可能(self):
+        # 3rd party library mock
+        mock = MockPPTXSlideApi()
+        mock.placeholders = [MockTitlePlaceHolder(),MockContntPlaceHolder(2)]
+        # My types 
+        list_content = ListContentPlaceHolder()
+        root = Text("Root")
+        root.change_font(28)
+        root.to_bold()
+        list_content.add(root)
+        parent = Text("Parent1")
+        parent.change_size(24)
+        list_content.add_child_to(0, parent)
+        list_content.top(0).add_child(Text("Child1"))
+        slide = Slide.title_and_content()
+        slide.add_placeholder(list_content)
+        sut = SlideConvertor(mock)
+
+        sut.convert(slide)
+
+        self.assertEqual(mock.placeholders[1].text, "Root")
+        text_frame:MockPPTXTextFrame = mock.placeholders[1].text_frame
+        self.assertEqual(text_frame.paragraphs[0].text, "Parent1")
+        self.assertEqual(text_frame.paragraphs[0].font.size, Pt(24))
+        self.assertEqual(text_frame.paragraphs[0].font.bold, False)
+        self.assertEqual(text_frame.paragraphs[1].text, "Child1")
+        self.assertEqual(text_frame.paragraphs[1].font.size, Pt(18))
+        self.assertEqual(text_frame.paragraphs[1].font.bold, False)
+
+
+
     def test_slideからcontent_placeholderを取得して変換可能(self):
         # 3rd party library mock
         mock = MockPPTXSlideApi()
@@ -101,7 +133,6 @@ class TestSlideConvertorPlaceHolder(unittest.TestCase):
 
         sut.convert(slide)
         
-
         self.assertEqual(mock.placeholders[1].text, "Hello World")
         text_frame:MockPPTXTextFrame = mock.placeholders[1].text_frame
         self.assertEqual(text_frame.paragraphs[0].text, "Good Bye")

@@ -5,6 +5,7 @@ from src.placeholders import (
     PlaceHolderType,
     TitlePlaceHolder,
     ContentPlaceHolder,
+    ListContentPlaceHolder,
 )
 
 
@@ -40,12 +41,44 @@ class SlideConvertor:
 
                     return
 
+        def __case_list_content(pptx_slide_api, placeholder: ListContentPlaceHolder):
+            def children(text_frame, parent: RecText, i: int):
+                if i > 7:
+                    # pptx only support 8 level list
+                    i = 7
+
+                if len(parent.children()) == 0:
+                    return
+
+                for child in parent.children():
+                    paragraph = text_frame.add_paragraph()
+                    paragraph.text = child.str()
+                    paragraph.font.bold = child.bold()
+                    paragraph.font.size = Pt(child.size())
+                    paragraph.level = i
+                    children(text_frame, child, i - 1)
+
+            for pptx_placeholder in self.pptx_slide_api.placeholders:
+                if "Content Placeholder" in pptx_placeholder.name:
+                    list_text: ListText = placeholder.value
+                    parents = list_text.lists()
+                    pptx_placeholder.text = parents[0].str()
+                    text_frame = pptx_placeholder.text_frame
+                    children(text_frame, parents[0], 1)
+                    for i in range(1, len(parents)):
+                        children(text_frame, parents[i], i)
+
+                    return
+
         for placeholder in placeholders:
             if placeholder.type == PlaceHolderType.TITLE:
                 __case_title(self.pptx_slide_api, placeholder)
 
             if placeholder.type == PlaceHolderType.CONTENT:
                 __case_content(self.pptx_slide_api, placeholder)
+
+            if placeholder.type == PlaceHolderType.LIST_CONTENT:
+                __case_list_content(self.pptx_slide_api, placeholder)
 
     def __convert_list_text(self, list_texts: [ListText]):
         def children(text_frame, parent: RecText, i: int):
