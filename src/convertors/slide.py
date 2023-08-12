@@ -16,6 +16,11 @@ from pptx.enum.text import MSO_AUTO_SIZE
 PPTX_MAX_LEVEL = 8
 
 
+class PlaceHolderPiceOfName:
+    TITLE = "Title"
+    CONTENT_PLACEHOLDER = "Content Placeholder"
+
+
 def add_text_frame_rec(text_frame, parent: RecText, i: int):
     # pptx only support 8 level list
     if i >= PPTX_MAX_LEVEL:
@@ -46,13 +51,13 @@ class SlideConvertor:
     def __convert_placeholder(self, placeholders: [AbstractPlaceHolder]):
         def __case_title(pptx_slide_api, placeholder: TitlePlaceHolder):
             for pptx_placeholder in self.pptx_slide_api.placeholders:
-                if "Title" in pptx_placeholder.name:
+                if PlaceHolderPiceOfName.TITLE in pptx_placeholder.name:
                     pptx_placeholder.text += placeholder.value
                     return
 
         def __case_content(pptx_slide_api, placeholder: ContentPlaceHolder):
             for pptx_placeholder in self.pptx_slide_api.placeholders:
-                if "Content Placeholder" in pptx_placeholder.name:
+                if PlaceHolderPiceOfName.CONTENT_PLACEHOLDER in pptx_placeholder.name:
                     pptx_placeholder.text = placeholder.value[0]
                     for i in range(1, len(placeholder.value)):
                         para = pptx_placeholder.text_frame.add_paragraph()
@@ -61,30 +66,15 @@ class SlideConvertor:
                     return
 
         def __case_list_content(pptx_slide_api, placeholder: ListContentPlaceHolder):
-            def children(text_frame, parent: RecText, i: int):
-                if i > 7:
-                    # pptx only support 8 level list
-                    i = 7
-
-                if len(parent.children()) == 0:
-                    return
-                for child in parent.children():
-                    paragraph = text_frame.add_paragraph()
-                    paragraph.text = child.str()
-                    paragraph.font.bold = child.bold()
-                    paragraph.font.size = Pt(child.size())
-                    paragraph.level = i
-                    children(text_frame, child, i + 1)
-
             for pptx_placeholder in self.pptx_slide_api.placeholders:
-                if "Content Placeholder" in pptx_placeholder.name:
+                if PlaceHolderPiceOfName.CONTENT_PLACEHOLDER in pptx_placeholder.name:
                     list_text: ListText = placeholder.value
                     parents = list_text.lists()
                     pptx_placeholder.text = parents[0].str()
                     text_frame = pptx_placeholder.text_frame
                     add_text_frame_rec(text_frame, parents[0], 1)
                     for i in range(1, len(parents)):
-                        children(text_frame, parents[i], i)
+                        add_text_frame_rec(text_frame, parents[i], i)
 
                     return
 
