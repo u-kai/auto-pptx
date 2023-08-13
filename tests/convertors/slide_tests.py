@@ -94,12 +94,14 @@ class TestSlideConvertorPlaceHolder(unittest.TestCase):
         # My types 
         list_content = ListContentPlaceHolder()
         root = Text("Root")
-        root.change_font(28)
+        root.change_size(28)
         root.to_bold()
         list_content.add(root)
+
         parent = Text("Parent1")
         parent.change_size(24)
         list_content.add_child_to(0, parent)
+
         list_content.top(0).child(0).add_child(Text("Child1"))
         slide = Slide.title_and_content()
         slide.add_placeholder(list_content)
@@ -107,18 +109,22 @@ class TestSlideConvertorPlaceHolder(unittest.TestCase):
 
         sut.convert(slide)
 
-        self.assertEqual(mock.placeholders[1].text, "Root")
-
         text_frame:MockPPTXTextFrame = mock.placeholders[1].text_frame
-        self.assertEqual(text_frame.paragraphs[0].text, "Parent1")
-        self.assertEqual(text_frame.paragraphs[0].font.size, Pt(24))
-        self.assertEqual(text_frame.paragraphs[0].font.bold, False)
-        self.assertEqual(text_frame.paragraphs[0].level, 1)
 
-        self.assertEqual(text_frame.paragraphs[1].text, "Child1")
-        self.assertEqual(text_frame.paragraphs[1].font.size, Pt(18))
+        self.assertEqual(text_frame.paragraphs[0].text, "Root")
+        self.assertEqual(text_frame.paragraphs[0].font.size, Pt(28))
+        self.assertEqual(text_frame.paragraphs[0].font.bold, True)
+        self.assertEqual(text_frame.paragraphs[0].level, 0)
+
+        self.assertEqual(text_frame.paragraphs[1].text, "Parent1")
+        self.assertEqual(text_frame.paragraphs[1].font.size, Pt(24))
         self.assertEqual(text_frame.paragraphs[1].font.bold, False)
-        self.assertEqual(text_frame.paragraphs[1].level, 2)
+        self.assertEqual(text_frame.paragraphs[1].level, 1)
+
+        self.assertEqual(text_frame.paragraphs[2].text, "Child1")
+        self.assertEqual(text_frame.paragraphs[2].font.size, Pt(18))
+        self.assertEqual(text_frame.paragraphs[2].font.bold, False)
+        self.assertEqual(text_frame.paragraphs[2].level, 2)
 
     def test_slideからcontent_placeholderを取得して変換可能(self):
         # 3rd party library mock

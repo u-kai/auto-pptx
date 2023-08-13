@@ -21,44 +21,6 @@ class PlaceHolderPiceOfName:
     CONTENT_PLACEHOLDER = "Content Placeholder"
 
 
-def set_paragraph(paragraph, text: Text):
-    paragraph.text = text.str()
-    paragraph.font.bold = text.bold()
-    paragraph.font.size = Pt(text.size())
-
-
-def add_paragraph(text_frame, text: Text):
-    paragraph = text_frame.add_paragraph()
-    set_paragraph(paragraph, text)
-
-
-def add_paragraph_with_level(text_frame, text: Text, level: int):
-    paragraph = text_frame.add_paragraph()
-    set_paragraph(paragraph, text)
-    paragraph.level = level
-
-
-def add_child_to_text_frame_rec(text_frame, parent: RecText, i: int):
-    if parent is None:
-        return
-    if len(parent.children()) == 0:
-        return
-
-    # pptx only support 8 level list
-    if i >= PPTX_MAX_LEVEL:
-        i = PPTX_MAX_LEVEL - 1
-
-    for child in parent.children():
-        add_paragraph_with_level(text_frame, child, i)
-        add_child_to_text_frame_rec(text_frame, child, i + 1)
-
-
-def add_roots_to_text_frame(text_frame, roots: [RecText]):
-    for root in roots:
-        add_paragraph_with_level(text_frame, root, 0)
-        add_child_to_text_frame_rec(text_frame, root, 1)
-
-
 class PlaceHolderConvertor:
     def __init__(self, placeholders):
         self.placeholders = placeholders
@@ -106,14 +68,8 @@ class PlaceHolderConvertor:
         def f(pptx_placeholder, placeholder):
             list_text: ListText = placeholder.value
             parents = list_text.lists()
-            # set first parent to placeholder top text
-            parent = parents[0]
-            pptx_placeholder.text = parents[0].str()
             text_frame = pptx_placeholder.text_frame
-            add_child_to_text_frame_rec(text_frame, parent, 1)
-
-            # add rest of parents to text_frame
-            add_roots_to_text_frame(text_frame, parents[1:])
+            add_roots_to_text_frame(text_frame, parents)
             return
 
         self.__case_any(placeholder, PlaceHolderPiceOfName.CONTENT_PLACEHOLDER, f)
@@ -137,7 +93,6 @@ class SlideConvertor:
         convertor.convert(placeholders)
 
     def __convert_list_text(self, list_texts: [ListText]):
-
         for list_text in list_texts:
             converted_box = self.__add_textbox(list_text.start_point, list_text.size)
             # skip top text_frame
@@ -155,6 +110,7 @@ class SlideConvertor:
     def __convert_textbox(self, textboxes: [TextBox]):
         for textbox in textboxes:
             converted_box = self.__add_textbox(textbox.start_point, textbox.size)
+            # skip top text_frame
             text_frame = converted_box.text_frame
             text_frame.text = ""
 
@@ -174,3 +130,41 @@ class SlideConvertor:
             Pt(size.width),
             Pt(size.height),
         )
+
+
+def set_paragraph(paragraph, text: Text):
+    paragraph.text = text.str()
+    paragraph.font.bold = text.bold()
+    paragraph.font.size = Pt(text.size())
+
+
+def add_paragraph(text_frame, text: Text):
+    paragraph = text_frame.add_paragraph()
+    set_paragraph(paragraph, text)
+
+
+def add_paragraph_with_level(text_frame, text: Text, level: int):
+    paragraph = text_frame.add_paragraph()
+    set_paragraph(paragraph, text)
+    paragraph.level = level
+
+
+def add_child_to_text_frame_rec(text_frame, parent: RecText, i: int):
+    if parent is None:
+        return
+    if len(parent.children()) == 0:
+        return
+
+    # pptx only support 8 level list
+    if i >= PPTX_MAX_LEVEL:
+        i = PPTX_MAX_LEVEL - 1
+
+    for child in parent.children():
+        add_paragraph_with_level(text_frame, child, i)
+        add_child_to_text_frame_rec(text_frame, child, i + 1)
+
+
+def add_roots_to_text_frame(text_frame, roots: [RecText]):
+    for root in roots:
+        add_paragraph_with_level(text_frame, root, 0)
+        add_child_to_text_frame_rec(text_frame, root, 1)

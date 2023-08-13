@@ -43,7 +43,7 @@ class Text:
         return
 
     def change_size(self, size: int):
-        self.font.size = size
+        self.font.change_size(size)
         return
 
     def to_bold(self):
