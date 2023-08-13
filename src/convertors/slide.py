@@ -55,11 +55,7 @@ def add_child_to_text_frame_rec(text_frame, parent: RecText, i: int):
 
 def add_roots_to_text_frame(text_frame, roots: [RecText]):
     for root in roots:
-        paragraph = text_frame.add_paragraph()
-        paragraph.text = root.str()
-        paragraph.font.bold = root.bold()
-        paragraph.font.size = Pt(root.size())
-        paragraph.level = 0
+        add_paragraph_with_level(text_frame, root, 0)
         add_child_to_text_frame_rec(text_frame, root, 1)
 
 
