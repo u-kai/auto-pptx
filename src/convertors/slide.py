@@ -1,5 +1,5 @@
 from src.slide import Slide, StartPoint, Size
-from src.components import TextBox, ListText, RecText
+from src.components import TextBox, ListText, RecText, Text
 from src.placeholders import (
     AbstractPlaceHolder,
     PlaceHolderType,
@@ -21,6 +21,23 @@ class PlaceHolderPiceOfName:
     CONTENT_PLACEHOLDER = "Content Placeholder"
 
 
+def set_paragraph(paragraph, text: Text):
+    paragraph.text = text.str()
+    paragraph.font.bold = text.bold()
+    paragraph.font.size = Pt(text.size())
+
+
+def add_paragraph(text_frame, text: Text, level: int):
+    paragraph = text_frame.add_paragraph()
+    set_paragraph(paragraph, text)
+
+
+def add_paragraph_with_level(text_frame, text: Text, level: int):
+    paragraph = text_frame.add_paragraph()
+    set_paragraph(paragraph, text)
+    paragraph.level = level
+
+
 def add_child_to_text_frame_rec(text_frame, parent: RecText, i: int):
     if parent is None:
         return
@@ -32,11 +49,7 @@ def add_child_to_text_frame_rec(text_frame, parent: RecText, i: int):
         i = PPTX_MAX_LEVEL - 1
 
     for child in parent.children():
-        paragraph = text_frame.add_paragraph()
-        paragraph.text = child.str()
-        paragraph.font.bold = child.bold()
-        paragraph.font.size = Pt(child.size())
-        paragraph.level = i
+        add_paragraph_with_level(text_frame, child, i)
         add_child_to_text_frame_rec(text_frame, child, i + 1)
 
 
@@ -68,7 +81,9 @@ class PlaceHolderConvertor:
 
         return
 
-    def __case_any(self, placeholder: AbstractPlaceHolder, pptx_placeholder_name, func):
+    def __case_any(
+        self, placeholder: AbstractPlaceHolder, pptx_placeholder_name: str, func
+    ):
         for pptx_placeholder in self.placeholders:
             if pptx_placeholder_name in pptx_placeholder.name:
                 func(pptx_placeholder, placeholder)
@@ -129,19 +144,14 @@ class SlideConvertor:
 
         for list_text in list_texts:
             converted_box = self.__add_textbox(list_text.start_point, list_text.size)
+            # skip top text_frame
             text_frame = converted_box.text_frame
             text_frame.text = ""
 
             if list_text is None or list_text.value is None:
                 continue
 
-            for top in list_text.value.lists():
-                paragraph = text_frame.add_paragraph()
-                paragraph.text = top.str()
-                paragraph.font.bold = top.bold()
-                paragraph.font.size = Pt(top.size())
-                paragraph.level = 0
-                add_child_to_text_frame_rec(text_frame, top, 1)
+            add_roots_to_text_frame(text_frame, list_text.value.lists())
             text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
 
         return

@@ -205,6 +205,10 @@ class TestSlideConvertorListTexts(unittest.TestCase):
         text.to_bold()
 
         list = ListText(text)
+        text = Text("Root2")
+        child = Text("Parent2")
+        list.add_siblings(text)
+        list.add_child_to(1, child)
 
         text = Text("Parent")
         list.add_child_to(0, text)
@@ -280,6 +284,39 @@ class TestSlideConvertorListTexts(unittest.TestCase):
             mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[3].font.bold,
             False,
         )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[3].level, 3
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[4].text, "Root2"
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[4].font.size,
+            Pt(18),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[4].font.bold,
+            False,
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[4].level, 0
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[5].text,
+            "Parent2",
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[5].font.size,
+            Pt(18),
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[5].font.bold,
+            False,
+        )
+        self.assertEqual(
+            mock.shapes.textboxs[0]["textbox"].text_frame.paragraphs[5].level, 1
+        )
+
 
 
 class TestSlideConvertorTextboxs(unittest.TestCase):
