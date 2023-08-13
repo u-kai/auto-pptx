@@ -17,6 +17,7 @@ class TestPlaceHolderConvertor(unittest.TestCase):
         sut = PlaceHolderConvertor([MockTitlePlaceHolder(), mock])
         sut.convert([list_content])
 
+        self.assertEqual(mock.text_frame.text, "")
         self.assertEqual(mock.text_frame.paragraphs[0].text, "Root1")
         self.assertEqual(mock.text_frame.paragraphs[1].text, "Root2")
 

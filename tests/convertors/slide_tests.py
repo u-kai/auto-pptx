@@ -23,6 +23,7 @@ class MockPPTXParagraph:
 
 class MockPPTXTextFrame:
     def __init__(self):
+        self.text = ""
         self.paragraphs = []
         return
 
