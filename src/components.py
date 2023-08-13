@@ -26,8 +26,11 @@ class Text:
     def __init__(self, text: str):
         self.text = text
         self.font = Font.calibri()
-        self.bold = False
+        self._bold = False
         return
+
+    def bold(self) -> bool:
+        return self._bold
 
     def str(self) -> str:
         return self.text
@@ -44,7 +47,7 @@ class Text:
         return
 
     def to_bold(self):
-        self.bold = True
+        self._bold = True
         return
 
     def __eq__(self, other) -> bool:
@@ -92,7 +95,7 @@ class RecText:
         self._children.append(RecText(text))
 
     def bold(self):
-        return self.text.bold
+        return self.text.bold()
 
     def size(self):
         return self.text.size()

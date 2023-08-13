@@ -27,7 +27,7 @@ def set_paragraph(paragraph, text: Text):
     paragraph.font.size = Pt(text.size())
 
 
-def add_paragraph(text_frame, text: Text, level: int):
+def add_paragraph(text_frame, text: Text):
     paragraph = text_frame.add_paragraph()
     set_paragraph(paragraph, text)
 
@@ -161,11 +161,9 @@ class SlideConvertor:
             if textbox is None or textbox.value is None:
                 continue
 
-            for i, text in enumerate(textbox.value.texts):
-                paragraph = text_frame.add_paragraph()
-                paragraph.text = text.str()
-                paragraph.font.bold = text.bold
-                paragraph.font.size = Pt(text.size())
+            for text in textbox.value.texts:
+                add_paragraph(text_frame, text)
+
             text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
         return
 
