@@ -2,6 +2,70 @@ from src.slide import SlideType, Component, Slide, Size, Component, StartPoint
 from src.components import TextBox, ListText, Text, Font, RecText
 from src.placeholders import TitlePlaceHolder, ListContentPlaceHolder
 import json
+from src.type_convertor import RecTextConvertorInterface, SlideConvertorInterface
+from typing import Optional, List
+
+
+class JsonToSlideConvertor(SlideConvertorInterface):
+    def __init__(self, json_str: str):
+        self.dict = json.loads(json_str)
+        return
+
+    def get_type(self) -> SlideType:
+        type = self.dict.get("type", None)
+        return type
+
+    def get_title(self) -> Optional[str]:
+        return self.dict.get("title", None)
+
+    def get_contents(self) -> Optional[ListContentPlaceHolder]:
+        maybe_contents = self.dict.get("contents", None)
+        if maybe_contents is None or len(maybe_contents) == 0:
+            return None
+
+        list_content_placeholder = ListContentPlaceHolder()
+        list_content_placeholder.value = make_list_text(maybe_contents)
+        return list_content_placeholder
+
+    def get_list_texts(self) -> Optional[List[Component]]:
+        return self.__get_list_texts_component()
+
+    def __get_list_texts_component(self) -> [Component]:
+        maybe_list_texts = self.dict.get("list_texts", None)
+        result = []
+        if maybe_list_texts is None:
+            return result
+
+        for list_text_dict in maybe_list_texts:
+            size = __get_size(list_text_dict)
+            start_point = __get_start_point(list_text_dict)
+            list_text = __get_list_text(list_text_dict)
+            result.append(Component(start_point, size, list_text))
+
+        return result
+
+    def __get_type(self) -> SlideType:
+        type = self.dict.get("type", None)
+        if type is None:
+            return SlideType.BLANK
+        if type == "title_only":
+            return SlideType.TITLE_ONLY
+        if type == "title_and_content":
+            return SlideType.TITLE_AND_CONTENT
+        if type == "blank":
+            return SlideType.BLANK
+        if type == "title_slide":
+            return SlideType.TITLE_SLIDE
+        if type == "section_header":
+            return SlideType.SECTION_HEADER
+        if type == "two_content":
+            return SlideType.TWO_CONTENT
+        if type == "comparison":
+            return SlideType.COMPARISON
+        if type == "content_with_caption":
+            return SlideType.CONTENT_WITH_CAPTION
+        if type == "picture_with_caption":
+            return SlideType.PICTURE_WITH_CAPTION
 
 
 def slide_from_json(json_str: str) -> Slide:
@@ -136,6 +200,8 @@ def __get_title_placeholder(json_dict: dict) -> TitlePlaceHolder:
 
 def __get_type(json_dict: dict) -> SlideType:
     type = json_dict.get("type", None)
+    if type is None:
+        return SlideType.BLANK
     if type == "title_only":
         return SlideType.TITLE_ONLY
     if type == "title_and_content":

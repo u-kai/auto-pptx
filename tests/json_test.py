@@ -1,6 +1,5 @@
 import unittest
-import json
-from src.json import slide_from_json
+from src.json import slide_from_json, JsonToSlideConvertor
 from src.components import Text, ListText, Font
 from src.placeholders import PlaceHolder
 from src.slide import Slide, Size, StartPoint
@@ -65,6 +64,12 @@ class TestJsonConvertor(unittest.TestCase):
         expected.add_placeholder(expected_placeholder)
 
         self.assertEqual(sut.placeholders[0], expected.placeholders[0])
+        self.assertEqual(sut.placeholders[1].value, expected.placeholders[1].value)
+
+        sut = JsonToSlideConvertor(json_str)
+        sut = sut.convert()
+        self.assertEqual(sut.placeholders[0], expected.placeholders[0])
+        self.assertEqual(sut.placeholders[1].value, expected.placeholders[1].value)
 
     def test_jsonからtitle_slideを取得できる(self):
         json_str = """
