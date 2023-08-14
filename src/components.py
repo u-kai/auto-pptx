@@ -3,6 +3,9 @@ class Font:
         self.font = font
         self.size = size
 
+    def from_str(font: str):
+        return Font(font, Font.__DEFAULT_SIZE())
+
     def __DEFAULT_SIZE():
         return 18
 
@@ -67,8 +70,17 @@ class ListText:
     def __init__(self, text: Text):
         self._tops = [RecText(text)]
 
+    def from_rec_text(rec_text):
+        this = ListText(rec_text.text)
+        this._tops = [rec_text]
+        return this
+
     def add_siblings(self, text: Text):
         self._tops.append(RecText(text))
+        return
+
+    def add_rec_siblings(self, rec_text):
+        self._tops.append(rec_text)
         return
 
     def lists(self):
@@ -90,6 +102,9 @@ class RecText:
     def __init__(self, text: Text):
         self.text = text
         self._children = []
+
+    def add_rec_child(self, child):
+        self._children.append(child)
 
     def add_child(self, text: Text):
         self._children.append(RecText(text))

@@ -12,34 +12,36 @@ class TestJsonConvertor(unittest.TestCase):
         {
             "type":"title_only",
             "title":"Title",
-            "list_text":{
-                "top":100,
-                "left":200,
-                "texts":[
-                    {
-                        "text":"Hello World",
-                        "bold":true,
-                        "font":"Meiryo UI",
-                        "size":28
-                    },
-                    {
-                        "text":"Hello Python",
-                        "children":[
-                            {
-                                "text":"Hello Java"
-                            },
-                            {
-                                "text":"Hello C#",
-                                "children":[
-                                    {
-                                        "text":"Hello C"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
+            "list_texts": [
+                {
+                    "top":100,
+                    "left":200,
+                    "texts":[
+                        {
+                            "text":"Hello World",
+                            "bold":true,
+                            "font":"Meiryo UI",
+                            "size":28
+                        },
+                        {
+                            "text":"Hello Python",
+                            "children":[
+                                {
+                                    "text":"Hello Java"
+                                },
+                                {
+                                    "text":"Hello C#",
+                                    "children":[
+                                        {
+                                            "text":"Hello C"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
         """
 
