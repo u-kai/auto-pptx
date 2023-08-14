@@ -58,19 +58,6 @@ def __get_list_text(json_dict: dict) -> ListText:
     if maybe_texts is None or len(maybe_texts) == 0:
         return None
 
-    # list_text = None
-    # for text in maybe_texts:
-    #    sibling = __get_text(text)
-    #    if sibling is None:
-    #        continue
-
-    #    if list_text is None:
-    #        list_text = ListText.from_rec_text(sibling)
-    #        continue
-
-    #    list_text.add_rec_siblings(sibling)
-
-    # return list_text
     return make_list_text(maybe_texts)
 
 
