@@ -79,7 +79,7 @@ def __get_text(json_dict: dict) -> RecText:
         return result
 
     for child in maybe_children:
-        result.add_child(__get_text(child))
+        result.add_rec_child(__get_text(child))
 
     return result
 

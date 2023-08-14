@@ -16,6 +16,8 @@ class TestJsonConvertor(unittest.TestCase):
                 {
                     "top":100,
                     "left":200,
+                    "width":300,
+                    "height":400,
                     "texts":[
                         {
                             "text":"Hello World",
@@ -60,13 +62,14 @@ class TestJsonConvertor(unittest.TestCase):
         expected_list.add_siblings(root2)
         expected_list.top(1).add_child(child1)
         expected_list.top(1).add_child(child2)
-        expected_list.top(1).child(0).add_child(child3)
+        expected_list.top(1).child(1).add_child(child3)
 
         expected_placeholder = PlaceHolder.title("Title")
 
         expected = Slide.title_only()
-        expected.add_list_text(StartPoint(200, 100), Size(0, 0), expected_list)
+        expected.add_list_text(StartPoint(200, 100), Size(300, 400), expected_list)
         expected.add_placeholder(expected_placeholder)
 
         self.assertEqual(sut.template, expected.template)
         self.assertEqual(sut.placeholders, expected.placeholders)
+        self.assertEqual(sut.list_texts[0].value, expected.list_texts[0].value)
