@@ -56,6 +56,11 @@ class Slide:
 
     ####################### Factory Methods #######################
 
+    def from_type(slide_type: SlideType):
+        this = Slide()
+        this.template = slide_type
+        return this
+
     def title_slide():
         this = Slide()
         this.template = SlideType.TITLE_SLIDE
@@ -100,3 +105,13 @@ class Slide:
         this = Slide()
         this.template = SlideType.PICTURE_WITH_CAPTION
         return this
+
+    ####################### other #######################
+
+    def __eq__(self, other):
+        return (
+            self.template == other.template
+            and self.textboxs == other.textboxs
+            and self.list_texts == other.list_texts
+            and self.placeholders == other.placeholders
+        )
