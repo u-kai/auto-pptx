@@ -1,11 +1,24 @@
-from dataclasses import dataclass
 from src.slide import SlideType, Component, Slide
+from src.placeholders import TitlePlaceHolder
 import json
 
 
 def slide_from_json(json_str: str) -> Slide:
     dict = json.loads(json_str)
-    return Slide.from_type(get_type(dict))
+    slide = Slide.from_type(get_type(dict))
+
+    title_placeholder = get_title_placeholder(dict)
+    if title_placeholder is not None:
+        slide.add_placeholder(title_placeholder)
+
+    return slide
+
+
+def get_title_placeholder(json_dict: dict) -> TitlePlaceHolder:
+    maybe_title = json_dict["title"]
+    if maybe_title is None:
+        return None
+    return TitlePlaceHolder(maybe_title)
 
 
 def get_type(json_dict: dict) -> SlideType:

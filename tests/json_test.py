@@ -67,3 +67,4 @@ class TestJsonConvertor(unittest.TestCase):
         expected.add_placeholder(expected_placeholder)
 
         self.assertEqual(sut.template, expected.template)
+        self.assertEqual(sut.placeholders, expected.placeholders)
