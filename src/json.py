@@ -1,6 +1,6 @@
 from src.slide import SlideType, Component, Slide, Size, Component, StartPoint
 from src.components import TextBox, ListText, Text, Font, RecText
-from src.placeholders import TitlePlaceHolder
+from src.placeholders import TitlePlaceHolder, ListContentPlaceHolder
 import json
 
 
@@ -12,6 +12,10 @@ def slide_from_json(json_str: str) -> Slide:
     if title_placeholder is not None:
         slide.add_placeholder(title_placeholder)
 
+    list_content_placeholder = __get_list_content_placeholder(dict)
+    if list_content_placeholder is not None:
+        slide.add_placeholder(list_content_placeholder)
+
     list_texts_components = __get_list_texts_component(dict)
 
     for list_texts_component in list_texts_components:
@@ -22,6 +26,16 @@ def slide_from_json(json_str: str) -> Slide:
         )
 
     return slide
+
+
+def __get_list_content_placeholder(json_dict: dict) -> ListContentPlaceHolder:
+    maybe_contents = json_dict.get("contents", None)
+    if maybe_contents is None or len(maybe_contents) == 0:
+        return None
+
+    list_content_placeholder = ListContentPlaceHolder()
+    list_content_placeholder.value = make_list_text(maybe_contents)
+    return list_content_placeholder
 
 
 def __get_list_texts_component(json_dict: dict) -> [Component]:
@@ -44,8 +58,25 @@ def __get_list_text(json_dict: dict) -> ListText:
     if maybe_texts is None or len(maybe_texts) == 0:
         return None
 
+    # list_text = None
+    # for text in maybe_texts:
+    #    sibling = __get_text(text)
+    #    if sibling is None:
+    #        continue
+
+    #    if list_text is None:
+    #        list_text = ListText.from_rec_text(sibling)
+    #        continue
+
+    #    list_text.add_rec_siblings(sibling)
+
+    # return list_text
+    return make_list_text(maybe_texts)
+
+
+def make_list_text(texts_dict: [dict]) -> ListText:
     list_text = None
-    for text in maybe_texts:
+    for text in texts_dict:
         sibling = __get_text(text)
         if sibling is None:
             continue
