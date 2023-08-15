@@ -8,25 +8,26 @@ from src.placeholders import PlaceHolder, TitlePlaceHolder, ListContentPlaceHold
 class TestSlideConvertor(unittest.TestCase):
     def test_slideを表現したrequestをslideに変換できる(self):
         cls = SlideRequest()
-        cls.type = "list_content"
+        cls.type = "title_and_content"
         cls.title = "Title"
-        content1 = ContentRequest
-        content1.text = "Hello World"
-        content1.bold = True
-        content1.font = "Meiryo UI"
-        content1.size = 28
-        content2 = ContentRequest
-        content2.text = "Hello Python"
-        content3 = ContentRequest
-        content3.text = "Hello Java"
-        content4 = ContentRequest
-        content4.text = "Hello C#"
-        content5 = ContentRequest
-        content5.text = "Hello C"
-        content2.children = [content3, content4]
-        content4.children = [content5]
-        cls.contents = [content1, content2]
-
+        cls.contents = [
+            ContentRequest(
+                text="Hello World",
+                bold=True,
+                font="Meiryo UI",
+                size=28,
+                children=[],
+            ),
+            ContentRequest(
+                text="Hello Python",
+                children=[
+                    ContentRequest(text="Hello Java"),
+                    ContentRequest(
+                        text="Hello C#", children=[ContentRequest(text="Hello C")]
+                    ),
+                ],
+            ),
+        ]
         sut = SlideRequestConvertor(cls)
         slide = sut.convert()
 
@@ -53,5 +54,7 @@ class TestSlideConvertor(unittest.TestCase):
         expected_placeholder.value = expected_list
         expected.add_placeholder(expected_placeholder)
 
-        self.assertEqual(slide.placeholders[0], expected.placeholders[0])
+        self.assertEqual(slide.template, expected.template)
+
+        self.assertEqual(slide.placeholders[0].value, expected.placeholders[0].value)
         self.assertEqual(slide.placeholders[1].value, expected.placeholders[1].value)

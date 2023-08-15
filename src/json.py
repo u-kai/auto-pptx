@@ -2,7 +2,11 @@ from src.slide import SlideType, Component, Slide, Size, Component, StartPoint
 from src.components import TextBox, ListText, Text, Font, RecText
 from src.placeholders import TitlePlaceHolder, ListContentPlaceHolder
 import json
-from src.type_convertor import RecTextConvertorInterface, SlideConvertorInterface
+from src.type_convertor import (
+    RecTextConvertorInterface,
+    SlideConvertorInterface,
+    TextSource,
+)
 from typing import Optional, List
 
 
@@ -28,9 +32,6 @@ class JsonToSlideConvertor(SlideConvertorInterface):
         return list_content_placeholder
 
     def get_list_texts(self) -> Optional[List[Component]]:
-        return self.__get_list_texts_component()
-
-    def __get_list_texts_component(self) -> [Component]:
         maybe_list_texts = self.dict.get("list_texts", None)
         result = []
         if maybe_list_texts is None:
@@ -43,29 +44,6 @@ class JsonToSlideConvertor(SlideConvertorInterface):
             result.append(Component(start_point, size, list_text))
 
         return result
-
-    def __get_type(self) -> SlideType:
-        type = self.dict.get("type", None)
-        if type is None:
-            return SlideType.BLANK
-        if type == "title_only":
-            return SlideType.TITLE_ONLY
-        if type == "title_and_content":
-            return SlideType.TITLE_AND_CONTENT
-        if type == "blank":
-            return SlideType.BLANK
-        if type == "title_slide":
-            return SlideType.TITLE_SLIDE
-        if type == "section_header":
-            return SlideType.SECTION_HEADER
-        if type == "two_content":
-            return SlideType.TWO_CONTENT
-        if type == "comparison":
-            return SlideType.COMPARISON
-        if type == "content_with_caption":
-            return SlideType.CONTENT_WITH_CAPTION
-        if type == "picture_with_caption":
-            return SlideType.PICTURE_WITH_CAPTION
 
 
 def slide_from_json(json_str: str) -> Slide:
@@ -123,6 +101,28 @@ def __get_list_text(json_dict: dict) -> ListText:
         return None
 
     return make_list_text(maybe_texts)
+
+
+class JsonToRecTextConvertor(RecTextConvertorInterface):
+    def __init__(self, text_dict: dict):
+        self.text_dict = text_dict
+
+    def get_text_source(self):
+        return TextSource(
+            self.text_dict.get("text", None),
+            self.text_dict.get("bold", None),
+            self.text_dict.get("font", None),
+            self.text_dict.get("size", None),
+        )
+
+    def get_children(self) -> Optional[List[TextSource]]:
+        maybe_children = self.text_dict.get("children", None)
+        if maybe_children is None:
+            return None
+        for child in maybe_children:
+            result.add_rec_child(__get_text(child))
+
+        return result
 
 
 def make_list_text(texts_dict: [dict]) -> ListText:

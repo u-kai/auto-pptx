@@ -1,30 +1,9 @@
 from typing import Optional, List
 from abc import ABCMeta, abstractmethod
-from src.components import RecText
+from src.components import RecText, Text, Font
 from src.slide import Slide, SlideType, Component
 from src.placeholders import ListContentPlaceHolder, TitlePlaceHolder
-
-
-class RecTextConvertorInterface(ABCMeta):
-    @abstractmethod
-    def get_text(self) -> Optional[str]:
-        pass
-
-    @abstractmethod
-    def get_bold(self) -> Optional[bool]:
-        pass
-
-    @abstractmethod
-    def get_size(self) -> Optional[int]:
-        pass
-
-    @abstractmethod
-    def get_font(self) -> Optional[str]:
-        pass
-
-    @abstractmethod
-    def get_children(self) -> Optional[List[RecText]]:
-        pass
+from dataclasses import dataclass
 
 
 class SlideConvertorInterface(metaclass=ABCMeta):
@@ -65,7 +44,46 @@ class SlideConvertorInterface(metaclass=ABCMeta):
     def get_list_texts(self) -> Optional[List[Component]]:
         pass
 
-    def get_start_point(self) -> (Optional[int], Optional[int]):
+
+@dataclass
+class TextSource:
+    text: Optional[str]
+    bold: Optional[bool]
+    size: Optional[int]
+    font: Optional[str]
+
+
+class RecTextConvertorInterface(metaclass=ABCMeta):
+    def convert(self) -> RecText:
+        source = self.get_text_source()
+        if source.text is None:
+            source.text = ""
+        text = Text(source.text)
+        if source.bold is not None and source.bold:
+            text.to_bold()
+        if source.font is not None:
+            font = Font.from_str(source.font)
+            if source.size is not None:
+                font.change_size(source.size)
+            text.change_font(font)
+
+        result = RecText(text)
+
+        maybe_children = self.get_children()
+        if maybe_children is None:
+            return result
+
+        for child in maybe_children:
+            result.add_rec_child(__get_text(child))
+
+        return result
+
+    @abstractmethod
+    def get_text_source(self) -> Optional[TextSource]:
+        pass
+
+    @abstractmethod
+    def get_children(self) -> Optional[List[TextSource]]:
         pass
 
 
