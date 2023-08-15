@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from src.pptx import PPTX
 from src.slide import Slide, StartPoint, Size
 from src.components import TextBox, Text, ListText
