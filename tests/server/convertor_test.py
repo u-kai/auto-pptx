@@ -46,6 +46,20 @@ class TestPresentationConvertor(unittest.TestCase):
 
         self.assertEqual(presentation.filename, expected.filename)
         self.assertEqual(presentation.page_num(), 2)
+        self.assertEqual(presentation.slides[0].template, expected.slides[0].template)
+        self.assertEqual(presentation.slides[1].template, expected.slides[1].template)
+        self.assertEqual(
+            presentation.slides[0].placeholders[0].value,
+            expected.slides[0].placeholders[0].value,
+        )
+        self.assertEqual(
+            presentation.slides[1].placeholders[0].value,
+            expected.slides[1].placeholders[0].value,
+        )
+        self.assertEqual(
+            presentation.slides[1].placeholders[1].value,
+            expected.slides[1].placeholders[1].value,
+        )
 
 
 class TestSlideConvertor(unittest.TestCase):

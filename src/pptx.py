@@ -11,13 +11,16 @@ class PPTX:
     def __init__(self, filename: str):
         self.convertor = PresentationConvertor(Presentation())
         self.filename = filename
+        self.slides = []
         self.page = 0
 
     def save(self):
+        for slide in self.slides:
+            self.convertor.add_slide(slide)
         self.convertor.save(self.filename)
 
     def add_slide(self, slide: Slide):
-        self.convertor.add_slide(slide)
+        self.slides.append(slide)
         self.page += 1
         return
 
