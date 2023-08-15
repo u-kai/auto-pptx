@@ -31,6 +31,8 @@ class PresentationRequestConvertor:
 
     def convert(self) -> PPTX:
         pptx = PPTX(self.req.filename)
+        if self.req.slides is None:
+            return pptx
         for slide_req in self.req.slides:
             slide = SlideRequestConvertor(slide_req).convert()
             pptx.add_slide(slide)
