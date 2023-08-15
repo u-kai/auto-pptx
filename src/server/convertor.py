@@ -3,6 +3,7 @@ from typing import Optional, List
 from src.slide import Slide, SlideType
 from src.components import Text, Font, ListText, RecText
 from src.placeholders import TitlePlaceHolder, ListContentPlaceHolder
+from src.pptx import PPTX
 
 
 class ContentRequest(BaseModel):
@@ -17,6 +18,23 @@ class SlideRequest(BaseModel):
     title: Optional[str]
     type: Optional[str]
     contents: Optional[List[ContentRequest]]
+
+
+class PresentationRequest(BaseModel):
+    filename: str
+    slides: Optional[List[SlideRequest]]
+
+
+class PresentationRequestConvertor:
+    def __init__(self, req: PresentationRequest):
+        self.req = req
+
+    def convert(self) -> PPTX:
+        pptx = PPTX(self.req.filename)
+        for slide_req in self.req.slides:
+            slide = SlideRequestConvertor(slide_req).convert()
+            pptx.add_slide(slide)
+        return pptx
 
 
 def change_text(text: Text, req: ContentRequest):
