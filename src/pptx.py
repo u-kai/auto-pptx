@@ -18,9 +18,6 @@ class PPTX:
 
     def add_slide(self, slide: Slide):
         self.convertor.add_slide(slide)
-        # self.presentation.slides.add_slide(self.presentation.slide_layouts[0])
-        # convertor = SlideConvertor(self.presentation.slides[self.page])
-        # convertor.convert(slide)
         self.page += 1
         return
 
