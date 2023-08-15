@@ -7,7 +7,6 @@ def api_server():
 
     @app.post("/create_pptx")
     async def create_pptx(req: PresentationRequest):
-        print(req)
         convertor = PresentationRequestConvertor(req)
         pptx = convertor.convert()
         pptx.save()
